@@ -31,7 +31,6 @@ Renamed from the DSP experiment by Alientek.
 
 Derived from the baseline codes, for specific uses.
 
-
 ## VERSION CONTROL
 
 ### STM32H743IIT-DEV-BASE

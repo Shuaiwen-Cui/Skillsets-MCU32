@@ -113,3 +113,10 @@
 ..\obj\main.o: ..\CORE\core_cm7.h
 ..\obj\main.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
 ..\obj\main.o: D:\Keil5\ARM\ARMCC\Bin\..\include\math.h
+..\obj\main.o: ..\HARDWARE\NAND\nand.h
+..\obj\main.o: ..\HARDWARE\NAND\ftl.h
+..\obj\main.o: ..\FATFS\source\ff.h
+..\obj\main.o: ..\FATFS\source\integer.h
+..\obj\main.o: ..\FATFS\source\ffconf.h
+..\obj\main.o: ..\FATFS\exfuns\exfuns.h
+..\obj\main.o: ..\APP\disp_est.h

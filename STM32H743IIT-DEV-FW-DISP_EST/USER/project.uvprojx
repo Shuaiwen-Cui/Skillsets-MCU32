@@ -338,7 +338,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER, STM32H743xx,ARM_MATH_CM7,__CC_ARM,ARM_MATH_MATRIX_CHECK,ARM_MATH_ROUNDING</Define>
               <Undefine></Undefine>
-              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HALLIB\STM32H7xx_HAL_Driver\Inc;..\USMART;..\MALLOC;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\TIMER;..\HARDWARE\MPU;..\HARDWARE\LCD;..\HARDWARE\SDRAM;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\PCF8574;..\HARDWARE\QSPI;..\HARDWARE\W25QXX;..\HARDWARE\SPI;..\HARDWARE\SDMMC;..\HARDWARE\NAND;..\HARDWARE\QSPI;..\HARDWARE\W25QXX;..\FATFS\exfuns;..\FATFS\source;..\TEXT;..\DSPLIB\Include</IncludePath>
+              <IncludePath>..\CORE;..\USER;..\SYSTEM\delay;..\SYSTEM\sys;..\SYSTEM\usart;..\HALLIB\STM32H7xx_HAL_Driver\Inc;..\USMART;..\MALLOC;..\HARDWARE\LED;..\HARDWARE\KEY;..\HARDWARE\TIMER;..\HARDWARE\MPU;..\HARDWARE\LCD;..\HARDWARE\SDRAM;..\HARDWARE\24CXX;..\HARDWARE\IIC;..\HARDWARE\PCF8574;..\HARDWARE\QSPI;..\HARDWARE\W25QXX;..\HARDWARE\SPI;..\HARDWARE\SDMMC;..\HARDWARE\NAND;..\HARDWARE\QSPI;..\HARDWARE\W25QXX;..\FATFS\exfuns;..\FATFS\source;..\TEXT;..\DSPLIB\Include;..\APP</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -401,6 +401,21 @@
               <FileName>stm32h7xx_hal_msp.c</FileName>
               <FileType>1</FileType>
               <FilePath>.\stm32h7xx_hal_msp.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>APP</GroupName>
+          <Files>
+            <File>
+              <FileName>disp_est.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\APP\disp_est.c</FilePath>
+            </File>
+            <File>
+              <FileName>disp_est.h</FileName>
+              <FileType>5</FileType>
+              <FilePath>..\APP\disp_est.h</FilePath>
             </File>
           </Files>
         </Group>

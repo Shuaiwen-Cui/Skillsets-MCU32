@@ -1,0 +1,7 @@
+NAND ID:0xdc909556
+total block num:4096
+good block num:4096
+valid block num:3809
+
+SD Card Fatfs OK!
+DISP EST TEST.
