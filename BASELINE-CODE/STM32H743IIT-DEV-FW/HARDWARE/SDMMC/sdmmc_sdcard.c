@@ -2,55 +2,55 @@
 #include "string.h"  
 #include "usart.h"	 
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌĞòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßĞí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32H7¿ª·¢°å
-//SDMMC Çı¶¯´úÂë	(½öÌá¹©²éÑ¯Ä£Ê½Çı¶¯´úÂë)
-//ÕıµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2018/7/31
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓĞ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32H7å¼€å‘æ¿
+//SDMMC é©±åŠ¨ä»£ç 	(ä»…æä¾›æŸ¥è¯¢æ¨¡å¼é©±åŠ¨ä»£ç )
+//æ­£ç‚¹åŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2018/7/31
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved		 
 //********************************************************************************
-//Éı¼¶ËµÃ÷
-//ÎŞ
+//å‡çº§è¯´æ˜
+//æ— 
 ////////////////////////////////////////////////////////////////////////////////// 	 
-static u8 CardType=STD_CAPACITY_SD_CARD_V1_1;			//SD¿¨ÀàĞÍ£¨Ä¬ÈÏÎª1.x¿¨£©
-static u32 CSD_Tab[4],CID_Tab[4],RCA=0;					//SD¿¨CSD,CIDÒÔ¼°Ïà¶ÔµØÖ·(RCA)Êı¾İ
-SD_CardInfo SDCardInfo;									//SD¿¨ĞÅÏ¢
+static u8 CardType=STD_CAPACITY_SD_CARD_V1_1;			//SDå¡ç±»å‹ï¼ˆé»˜è®¤ä¸º1.xå¡ï¼‰
+static u32 CSD_Tab[4],CID_Tab[4],RCA=0;					//SDå¡CSD,CIDä»¥åŠç›¸å¯¹åœ°å€(RCA)æ•°æ®
+SD_CardInfo SDCardInfo;									//SDå¡ä¿¡æ¯
 
-//SD_ReadDisk/SD_WriteDiskº¯Êı×¨ÓÃbuf,µ±ÕâÁ½¸öº¯ÊıµÄÊı¾İ»º´æÇøµØÖ·²»ÊÇ4×Ö½Ú¶ÔÆëµÄÊ±ºò,
-//ĞèÒªÓÃµ½¸ÃÊı×é,È·±£Êı¾İ»º´æÇøµØÖ·ÊÇ4×Ö½Ú¶ÔÆëµÄ.
+//SD_ReadDisk/SD_WriteDiskå‡½æ•°ä¸“ç”¨buf,å½“è¿™ä¸¤ä¸ªå‡½æ•°çš„æ•°æ®ç¼“å­˜åŒºåœ°å€ä¸æ˜¯4å­—èŠ‚å¯¹é½çš„æ—¶å€™,
+//éœ€è¦ç”¨åˆ°è¯¥æ•°ç»„,ç¡®ä¿æ•°æ®ç¼“å­˜åŒºåœ°å€æ˜¯4å­—èŠ‚å¯¹é½çš„.
 __align(4) u8 SDMMC_DATA_BUFFER[512];						  
  
 
-//³õÊ¼»¯SD¿¨
-//·µ»ØÖµ:´íÎó´úÂë;(0,ÎŞ´íÎó)
+//åˆå§‹åŒ–SDå¡
+//è¿”å›å€¼:é”™è¯¯ä»£ç ;(0,æ— é”™è¯¯)
 SD_Error SD_Init(void)
 {
 	SD_Error errorstatus=SD_OK;	  
 	u8 clkdiv=0;
-	//SDMMC1 IO¿Ú³õÊ¼»¯   	 
+	//SDMMC1 IOå£åˆå§‹åŒ–   	 
     GPIO_InitTypeDef GPIO_Initure;
 
-    __HAL_RCC_SDMMC1_CLK_ENABLE();  //Ê¹ÄÜSDMMC1Ê±ÖÓ
-    __HAL_RCC_GPIOC_CLK_ENABLE();   //Ê¹ÄÜGPIOCÊ±ÖÓ
-    __HAL_RCC_GPIOD_CLK_ENABLE();   //Ê¹ÄÜGPIODÊ±ÖÓ
+    __HAL_RCC_SDMMC1_CLK_ENABLE();  //ä½¿èƒ½SDMMC1æ—¶é’Ÿ
+    __HAL_RCC_GPIOC_CLK_ENABLE();   //ä½¿èƒ½GPIOCæ—¶é’Ÿ
+    __HAL_RCC_GPIOD_CLK_ENABLE();   //ä½¿èƒ½GPIODæ—¶é’Ÿ
     
     //PC8,9,10,11,12
     GPIO_Initure.Pin=GPIO_PIN_8|GPIO_PIN_9|GPIO_PIN_10|GPIO_PIN_11|GPIO_PIN_12;
-    GPIO_Initure.Mode=GPIO_MODE_AF_PP;      //ÍÆÍì¸´ÓÃ
-    GPIO_Initure.Pull=GPIO_NOPULL;          //ÎŞÉÏÏÂÀ­
-    GPIO_Initure.Speed=GPIO_SPEED_FREQ_VERY_HIGH;     //¸ßËÙ
-    GPIO_Initure.Alternate=GPIO_AF12_SDIO1; //¸´ÓÃÎªSDIO
-    HAL_GPIO_Init(GPIOC,&GPIO_Initure);     //³õÊ¼»¯
+    GPIO_Initure.Mode=GPIO_MODE_AF_PP;      //æ¨æŒ½å¤ç”¨
+    GPIO_Initure.Pull=GPIO_NOPULL;          //æ— ä¸Šä¸‹æ‹‰
+    GPIO_Initure.Speed=GPIO_SPEED_FREQ_VERY_HIGH;     //é«˜é€Ÿ
+    GPIO_Initure.Alternate=GPIO_AF12_SDIO1; //å¤ç”¨ä¸ºSDIO
+    HAL_GPIO_Init(GPIOC,&GPIO_Initure);     //åˆå§‹åŒ–
     
     //PD2
     GPIO_Initure.Pin=GPIO_PIN_2;            
-    HAL_GPIO_Init(GPIOD,&GPIO_Initure);     //³õÊ¼»¯
+    HAL_GPIO_Init(GPIOD,&GPIO_Initure);     //åˆå§‹åŒ–
     
- 	//SDMMCÍâÉè¼Ä´æÆ÷ÉèÖÃÎªÄ¬ÈÏÖµ 			   
+ 	//SDMMCå¤–è®¾å¯„å­˜å™¨è®¾ç½®ä¸ºé»˜è®¤å€¼ 			   
 	SDMMC1->POWER=0x00000000;
 	SDMMC1->CLKCR=0x00000000;
 	SDMMC1->ARG=0x00000000;
@@ -61,27 +61,27 @@ SD_Error SD_Init(void)
 	SDMMC1->ICR=0X1FE00FFF;
 	SDMMC1->MASK=0x00000000;	  
 
-    HAL_NVIC_SetPriority(SDMMC1_IRQn,2,0);  //ÅäÖÃSDMMC1ÖĞ¶Ï£¬ÇÀÕ¼ÓÅÏÈ¼¶2£¬×ÓÓÅÏÈ¼¶0
-    HAL_NVIC_EnableIRQ(SDMMC1_IRQn);        //Ê¹ÄÜSDMMC1ÖĞ¶Ï
+    HAL_NVIC_SetPriority(SDMMC1_IRQn,2,0);  //é…ç½®SDMMC1ä¸­æ–­ï¼ŒæŠ¢å ä¼˜å…ˆçº§2ï¼Œå­ä¼˜å…ˆçº§0
+    HAL_NVIC_EnableIRQ(SDMMC1_IRQn);        //ä½¿èƒ½SDMMC1ä¸­æ–­
     
-   	errorstatus=SD_PowerON();			//SD¿¨ÉÏµç
- 	if(errorstatus==SD_OK)errorstatus=SD_InitializeCards();			//³õÊ¼»¯SD¿¨														  
-  	if(errorstatus==SD_OK)errorstatus=SD_GetCardInfo(&SDCardInfo);	//»ñÈ¡¿¨ĞÅÏ¢
- 	if(errorstatus==SD_OK)errorstatus=SD_SelectDeselect((u32)(SDCardInfo.RCA<<16));//Ñ¡ÖĞSD¿¨   
-   	if(errorstatus==SD_OK)errorstatus=SD_EnableWideBusOperation(1);	//4Î»¿í¶È,Èç¹ûÊÇMMC¿¨,Ôò²»ÄÜÓÃ4Î»Ä£Ê½ 
+   	errorstatus=SD_PowerON();			//SDå¡ä¸Šç”µ
+ 	if(errorstatus==SD_OK)errorstatus=SD_InitializeCards();			//åˆå§‹åŒ–SDå¡														  
+  	if(errorstatus==SD_OK)errorstatus=SD_GetCardInfo(&SDCardInfo);	//è·å–å¡ä¿¡æ¯
+ 	if(errorstatus==SD_OK)errorstatus=SD_SelectDeselect((u32)(SDCardInfo.RCA<<16));//é€‰ä¸­SDå¡   
+   	if(errorstatus==SD_OK)errorstatus=SD_EnableWideBusOperation(1);	//4ä½å®½åº¦,å¦‚æœæ˜¯MMCå¡,åˆ™ä¸èƒ½ç”¨4ä½æ¨¡å¼ 
   	if((errorstatus==SD_OK)||(MULTIMEDIA_CARD==CardType))
 	{  		    
 		if(SDCardInfo.CardType==STD_CAPACITY_SD_CARD_V1_1||SDCardInfo.CardType==STD_CAPACITY_SD_CARD_V2_0)
 		{
-			clkdiv=SDMMC_TRANSFER_CLK_DIV+2;	//V1.1/V2.0¿¨£¬ÉèÖÃ×î¸ß48/4=12Mhz
-		}else clkdiv=SDMMC_TRANSFER_CLK_DIV;	//SDHCµÈÆäËû¿¨£¬ÉèÖÃ×î¸ß48/2=24Mhz
-		SDMMC_Clock_Set(clkdiv);	//ÉèÖÃÊ±ÖÓÆµÂÊ,SDMMCÊ±ÖÓ¼ÆËã¹«Ê½:SDMMC_CKÊ±ÖÓ=SDMMCCLK/[clkdiv+2];ÆäÖĞ,SDMMCCLK¹Ì¶¨Îª48Mhz 
+			clkdiv=SDMMC_TRANSFER_CLK_DIV+2;	//V1.1/V2.0å¡ï¼Œè®¾ç½®æœ€é«˜48/4=12Mhz
+		}else clkdiv=SDMMC_TRANSFER_CLK_DIV;	//SDHCç­‰å…¶ä»–å¡ï¼Œè®¾ç½®æœ€é«˜48/2=24Mhz
+		SDMMC_Clock_Set(clkdiv);	//è®¾ç½®æ—¶é’Ÿé¢‘ç‡,SDMMCæ—¶é’Ÿè®¡ç®—å…¬å¼:SDMMC_CKæ—¶é’Ÿ=SDMMCCLK/[clkdiv+2];å…¶ä¸­,SDMMCCLKå›ºå®šä¸º48Mhz 
   	}
 	return errorstatus;		 
 }
-//SDMMCÊ±ÖÓ³õÊ¼»¯ÉèÖÃ
-//clkdiv:Ê±ÖÓ·ÖÆµÏµÊı
-//CKÊ±ÖÓ=sdmmc_ker_ck/[2*clkdiv];(sdmmc_ker_ckÖÓ¹Ì¶¨Îª400Mhz)
+//SDMMCæ—¶é’Ÿåˆå§‹åŒ–è®¾ç½®
+//clkdiv:æ—¶é’Ÿåˆ†é¢‘ç³»æ•°
+//CKæ—¶é’Ÿ=sdmmc_ker_ck/[2*clkdiv];(sdmmc_ker_cké’Ÿå›ºå®šä¸º400Mhz)
 void SDMMC_Clock_Set(u16 clkdiv)
 {
 	u32 tmpreg=SDMMC1->CLKCR; 
@@ -89,42 +89,42 @@ void SDMMC_Clock_Set(u16 clkdiv)
  	tmpreg|=clkdiv;   
 	SDMMC1->CLKCR=tmpreg;
 } 
-//SDMMC·¢ËÍÃüÁîº¯Êı
-//cmdindex:ÃüÁîË÷Òı,µÍÁùÎ»ÓĞĞ§
-//waitrsp:ÆÚ´ıµÄÏàÓ¦.00/10,ÎŞÏìÓ¦;01,¶ÌÏìÓ¦;11,³¤ÏìÓ¦
-//arg:²ÎÊı
+//SDMMCå‘é€å‘½ä»¤å‡½æ•°
+//cmdindex:å‘½ä»¤ç´¢å¼•,ä½å…­ä½æœ‰æ•ˆ
+//waitrsp:æœŸå¾…çš„ç›¸åº”.00/10,æ— å“åº”;01,çŸ­å“åº”;11,é•¿å“åº”
+//arg:å‚æ•°
 void SDMMC_Send_Cmd(u8 cmdindex,u8 waitrsp,u32 arg)
 {			
 	u32 tmpreg=0;
 	SDMMC1->ARG=arg;  
-	tmpreg|=cmdindex&0X3F;	//ÉèÖÃĞÂµÄindex			 
-	tmpreg|=(u32)waitrsp<<8;//ÉèÖÃĞÂµÄwait rsp 
-	tmpreg|=0<<10;			//ÎŞµÈ´ı
-  	tmpreg|=1<<12;			//ÃüÁîÍ¨µÀ×´Ì¬»úÊ¹ÄÜ
+	tmpreg|=cmdindex&0X3F;	//è®¾ç½®æ–°çš„index			 
+	tmpreg|=(u32)waitrsp<<8;//è®¾ç½®æ–°çš„wait rsp 
+	tmpreg|=0<<10;			//æ— ç­‰å¾…
+  	tmpreg|=1<<12;			//å‘½ä»¤é€šé“çŠ¶æ€æœºä½¿èƒ½
 	SDMMC1->CMD=tmpreg;
 }
-//SDMMC·¢ËÍÊı¾İÅäÖÃº¯Êı
-//datatimeout:³¬Ê±Ê±¼äÉèÖÃ
-//datalen:´«ÊäÊı¾İ³¤¶È,µÍ25Î»ÓĞĞ§,±ØĞëÎª¿é´óĞ¡µÄÕûÊı±¶
-//blksize:¿é´óĞ¡.Êµ¼Ê´óĞ¡Îª:2^blksize×Ö½Ú
-//dir:Êı¾İ´«Êä·½Ïò:0,¿ØÖÆÆ÷µ½¿¨;1,¿¨µ½¿ØÖÆÆ÷;
+//SDMMCå‘é€æ•°æ®é…ç½®å‡½æ•°
+//datatimeout:è¶…æ—¶æ—¶é—´è®¾ç½®
+//datalen:ä¼ è¾“æ•°æ®é•¿åº¦,ä½25ä½æœ‰æ•ˆ,å¿…é¡»ä¸ºå—å¤§å°çš„æ•´æ•°å€
+//blksize:å—å¤§å°.å®é™…å¤§å°ä¸º:2^blksizeå­—èŠ‚
+//dir:æ•°æ®ä¼ è¾“æ–¹å‘:0,æ§åˆ¶å™¨åˆ°å¡;1,å¡åˆ°æ§åˆ¶å™¨;
 void SDMMC_Send_Data_Cfg(u32 datatimeout,u32 datalen,u8 blksize,u8 dir)
 {
 	u32 tmpreg;
 	SDMMC1->DTIMER=datatimeout;
-  	SDMMC1->DLEN=datalen&0X1FFFFFF;	//µÍ25Î»ÓĞĞ§
+  	SDMMC1->DLEN=datalen&0X1FFFFFF;	//ä½25ä½æœ‰æ•ˆ
 	tmpreg=SDMMC1->DCTRL; 
-	tmpreg&=0xFFFFFF00;		//Çå³ıÖ®Ç°µÄÉèÖÃ.
-	tmpreg|=blksize<<4;		//ÉèÖÃ¿é´óĞ¡
-	tmpreg|=0<<2;			//¿éÊı¾İ´«Êä
-	tmpreg|=(dir&0X01)<<1;	//·½Ïò¿ØÖÆ
-	tmpreg|=1<<0;			//Êı¾İ´«ÊäÊ¹ÄÜ,DPSM×´Ì¬»ú
+	tmpreg&=0xFFFFFF00;		//æ¸…é™¤ä¹‹å‰çš„è®¾ç½®.
+	tmpreg|=blksize<<4;		//è®¾ç½®å—å¤§å°
+	tmpreg|=0<<2;			//å—æ•°æ®ä¼ è¾“
+	tmpreg|=(dir&0X01)<<1;	//æ–¹å‘æ§åˆ¶
+	tmpreg|=1<<0;			//æ•°æ®ä¼ è¾“ä½¿èƒ½,DPSMçŠ¶æ€æœº
 	SDMMC1->DCTRL=tmpreg;		
 }  
 
-//¿¨ÉÏµç
-//²éÑ¯ËùÓĞSDMMC½Ó¿ÚÉÏµÄ¿¨Éè±¸,²¢²éÑ¯ÆäµçÑ¹ºÍÅäÖÃÊ±ÖÓ
-//·µ»ØÖµ:´íÎó´úÂë;(0,ÎŞ´íÎó)
+//å¡ä¸Šç”µ
+//æŸ¥è¯¢æ‰€æœ‰SDMMCæ¥å£ä¸Šçš„å¡è®¾å¤‡,å¹¶æŸ¥è¯¢å…¶ç”µå‹å’Œé…ç½®æ—¶é’Ÿ
+//è¿”å›å€¼:é”™è¯¯ä»£ç ;(0,æ— é”™è¯¯)
 SD_Error SD_PowerON(void)
 {
  	u8 i=0;
@@ -132,46 +132,46 @@ SD_Error SD_PowerON(void)
 	SD_Error errorstatus=SD_OK;
 	u32 response=0,count=0,validvoltage=0;
 	u32 SDType=SD_STD_CAPACITY;
-	//ÅäÖÃCLKCR¼Ä´æÆ÷  
-	tempreg|=0<<12;				//PWRSAV=0,·ÇÊ¡µçÄ£Ê½ 
-	tempreg|=0<<14;				//WIDBUS[1:0]=0,1Î»Êı¾İ¿í¶È
-	tempreg|=0<<16;				//NEGEDGE=0,SDMMCCKÏÂ½µÑØ¸ü¸ÄÃüÁîºÍÊı¾İ
-	tempreg|=0<<17;				//HWFC_EN=0,¹Ø±ÕÓ²¼şÁ÷¿ØÖÆ    
+	//é…ç½®CLKCRå¯„å­˜å™¨  
+	tempreg|=0<<12;				//PWRSAV=0,éçœç”µæ¨¡å¼ 
+	tempreg|=0<<14;				//WIDBUS[1:0]=0,1ä½æ•°æ®å®½åº¦
+	tempreg|=0<<16;				//NEGEDGE=0,SDMMCCKä¸‹é™æ²¿æ›´æ”¹å‘½ä»¤å’Œæ•°æ®
+	tempreg|=0<<17;				//HWFC_EN=0,å…³é—­ç¡¬ä»¶æµæ§åˆ¶    
 	SDMMC1->CLKCR=tempreg; 
-	SDMMC_Clock_Set(SDMMC_INIT_CLK_DIV);//ÉèÖÃÊ±ÖÓÆµÂÊ(³õÊ¼»¯µÄÊ±ºò,²»ÄÜ³¬¹ı400Khz)			 
- 	SDMMC1->POWER=0X03;			//ÉÏµç×´Ì¬,¿ªÆô¿¨Ê±ÖÓ     
+	SDMMC_Clock_Set(SDMMC_INIT_CLK_DIV);//è®¾ç½®æ—¶é’Ÿé¢‘ç‡(åˆå§‹åŒ–çš„æ—¶å€™,ä¸èƒ½è¶…è¿‡400Khz)			 
+ 	SDMMC1->POWER=0X03;			//ä¸Šç”µçŠ¶æ€,å¼€å¯å¡æ—¶é’Ÿ     
    	for(i=0;i<74;i++)
 	{
-		SDMMC_Send_Cmd(SD_CMD_GO_IDLE_STATE,0,0);//·¢ËÍCMD0½øÈëIDLE STAGEÄ£Ê½ÃüÁî.												  
+		SDMMC_Send_Cmd(SD_CMD_GO_IDLE_STATE,0,0);//å‘é€CMD0è¿›å…¥IDLE STAGEæ¨¡å¼å‘½ä»¤.												  
 		errorstatus=CmdError();
 		if(errorstatus==SD_OK)break;
  	}
- 	if(errorstatus)return errorstatus;//·µ»Ø´íÎó×´Ì¬
-	SDMMC_Send_Cmd(SD_SDMMC_SEND_IF_COND,1,SD_CHECK_PATTERN);//·¢ËÍCMD8,¶ÌÏìÓ¦,¼ì²éSD¿¨½Ó¿ÚÌØĞÔ.
- 														//arg[11:8]:01,Ö§³ÖµçÑ¹·¶Î§,2.7~3.6V
-														//arg[7:0]:Ä¬ÈÏ0XAA
-														//·µ»ØÏìÓ¦7
-  	errorstatus=CmdResp7Error();						//µÈ´ıR7ÏìÓ¦
- 	if(errorstatus==SD_OK) 								//R7ÏìÓ¦Õı³£
+ 	if(errorstatus)return errorstatus;//è¿”å›é”™è¯¯çŠ¶æ€
+	SDMMC_Send_Cmd(SD_SDMMC_SEND_IF_COND,1,SD_CHECK_PATTERN);//å‘é€CMD8,çŸ­å“åº”,æ£€æŸ¥SDå¡æ¥å£ç‰¹æ€§.
+ 														//arg[11:8]:01,æ”¯æŒç”µå‹èŒƒå›´,2.7~3.6V
+														//arg[7:0]:é»˜è®¤0XAA
+														//è¿”å›å“åº”7
+  	errorstatus=CmdResp7Error();						//ç­‰å¾…R7å“åº”
+ 	if(errorstatus==SD_OK) 								//R7å“åº”æ­£å¸¸
 	{
-		CardType=STD_CAPACITY_SD_CARD_V2_0;				//SD 2.0¿¨
-		SDType=SD_HIGH_CAPACITY;			   			//¸ßÈİÁ¿¿¨
+		CardType=STD_CAPACITY_SD_CARD_V2_0;				//SD 2.0å¡
+		SDType=SD_HIGH_CAPACITY;			   			//é«˜å®¹é‡å¡
 	}
-	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,0);					//·¢ËÍCMD55,¶ÌÏìÓ¦	 
-	errorstatus=CmdResp1Error(SD_CMD_APP_CMD); 		 	//µÈ´ıR1ÏìÓ¦   
-	if(errorstatus==SD_OK)//SD2.0/SD 1.1,·ñÔòÎªMMC¿¨
+	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,0);					//å‘é€CMD55,çŸ­å“åº”	 
+	errorstatus=CmdResp1Error(SD_CMD_APP_CMD); 		 	//ç­‰å¾…R1å“åº”   
+	if(errorstatus==SD_OK)//SD2.0/SD 1.1,å¦åˆ™ä¸ºMMCå¡
 	{																  
-		//SD¿¨,·¢ËÍACMD41 SD_APP_OP_COND,²ÎÊıÎª:0x80100000 
+		//SDå¡,å‘é€ACMD41 SD_APP_OP_COND,å‚æ•°ä¸º:0x80100000 
 		while((!validvoltage)&&(count<SD_MAX_VOLT_TRIAL))
 		{	   										   
-			SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,0);				//·¢ËÍCMD55,¶ÌÏìÓ¦	 
-			errorstatus=CmdResp1Error(SD_CMD_APP_CMD); 	 	//µÈ´ıR1ÏìÓ¦   
- 			if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó
-			SDMMC_Send_Cmd(SD_CMD_SD_APP_OP_COND,1,SD_VOLTAGE_WINDOW_SD|SDType);//·¢ËÍACMD41,¶ÌÏìÓ¦	 
-			errorstatus=CmdResp3Error(); 					//µÈ´ıR3ÏìÓ¦   
- 			if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó  
-			response=SDMMC1->RESP1;;			   				//µÃµ½ÏìÓ¦
-			validvoltage=(((response>>31)==1)?1:0);			//ÅĞ¶ÏSD¿¨ÉÏµçÊÇ·ñÍê³É
+			SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,0);				//å‘é€CMD55,çŸ­å“åº”	 
+			errorstatus=CmdResp1Error(SD_CMD_APP_CMD); 	 	//ç­‰å¾…R1å“åº”   
+ 			if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯
+			SDMMC_Send_Cmd(SD_CMD_SD_APP_OP_COND,1,SD_VOLTAGE_WINDOW_SD|SDType);//å‘é€ACMD41,çŸ­å“åº”	 
+			errorstatus=CmdResp3Error(); 					//ç­‰å¾…R3å“åº”   
+ 			if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯  
+			response=SDMMC1->RESP1;;			   				//å¾—åˆ°å“åº”
+			validvoltage=(((response>>31)==1)?1:0);			//åˆ¤æ–­SDå¡ä¸Šç”µæ˜¯å¦å®Œæˆ
 			count++;
 		}
 		if(count>=SD_MAX_VOLT_TRIAL)
@@ -183,15 +183,15 @@ SD_Error SD_PowerON(void)
 		{
 			CardType=HIGH_CAPACITY_SD_CARD;
 		}
- 	}else//MMC¿¨
+ 	}else//MMCå¡
 	{
-		//MMC¿¨,·¢ËÍCMD1 SDMMC_SEND_OP_COND,²ÎÊıÎª:0x80FF8000 
+		//MMCå¡,å‘é€CMD1 SDMMC_SEND_OP_COND,å‚æ•°ä¸º:0x80FF8000 
 		while((!validvoltage)&&(count<SD_MAX_VOLT_TRIAL))
 		{	   										   				   
-			SDMMC_Send_Cmd(SD_CMD_SEND_OP_COND,1,SD_VOLTAGE_WINDOW_MMC);//·¢ËÍCMD1,¶ÌÏìÓ¦	 
-			errorstatus=CmdResp3Error(); 					//µÈ´ıR3ÏìÓ¦   
- 			if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó  
-			response=SDMMC1->RESP1;;			   				//µÃµ½ÏìÓ¦
+			SDMMC_Send_Cmd(SD_CMD_SEND_OP_COND,1,SD_VOLTAGE_WINDOW_MMC);//å‘é€CMD1,çŸ­å“åº”	 
+			errorstatus=CmdResp3Error(); 					//ç­‰å¾…R3å“åº”   
+ 			if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯  
+			response=SDMMC1->RESP1;;			   				//å¾—åˆ°å“åº”
 			validvoltage=(((response>>31)==1)?1:0);
 			count++;
 		}
@@ -204,378 +204,378 @@ SD_Error SD_PowerON(void)
   	}  
   	return(errorstatus);		
 }
-//SD¿¨ Power OFF
-//·µ»ØÖµ:´íÎó´úÂë;(0,ÎŞ´íÎó)
+//SDå¡ Power OFF
+//è¿”å›å€¼:é”™è¯¯ä»£ç ;(0,æ— é”™è¯¯)
 SD_Error SD_PowerOFF(void)
 {
-  	SDMMC1->POWER&=~(3<<0);//SDMMCµçÔ´¹Ø±Õ,Ê±ÖÓÍ£Ö¹	
+  	SDMMC1->POWER&=~(3<<0);//SDMMCç”µæºå…³é—­,æ—¶é’Ÿåœæ­¢	
 	return SD_OK;		  
 }   
-//³õÊ¼»¯ËùÓĞµÄ¿¨,²¢ÈÃ¿¨½øÈë¾ÍĞ÷×´Ì¬
-//·µ»ØÖµ:´íÎó´úÂë
+//åˆå§‹åŒ–æ‰€æœ‰çš„å¡,å¹¶è®©å¡è¿›å…¥å°±ç»ªçŠ¶æ€
+//è¿”å›å€¼:é”™è¯¯ä»£ç 
 SD_Error SD_InitializeCards(void)
 {
  	SD_Error errorstatus=SD_OK;
 	u16 rca = 0x01;
- 	if((SDMMC1->POWER&0X03)==0)return SD_REQUEST_NOT_APPLICABLE;//¼ì²éµçÔ´×´Ì¬,È·±£ÎªÉÏµç×´Ì¬
- 	if(SECURE_DIGITAL_IO_CARD!=CardType)				//·ÇSECURE_DIGITAL_IO_CARD
+ 	if((SDMMC1->POWER&0X03)==0)return SD_REQUEST_NOT_APPLICABLE;//æ£€æŸ¥ç”µæºçŠ¶æ€,ç¡®ä¿ä¸ºä¸Šç”µçŠ¶æ€
+ 	if(SECURE_DIGITAL_IO_CARD!=CardType)				//éSECURE_DIGITAL_IO_CARD
 	{
-		SDMMC_Send_Cmd(SD_CMD_ALL_SEND_CID,3,0);		//·¢ËÍCMD2,È¡µÃCID,³¤ÏìÓ¦	 
-		errorstatus=CmdResp2Error(); 					//µÈ´ıR2ÏìÓ¦   
-		if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó		    
+		SDMMC_Send_Cmd(SD_CMD_ALL_SEND_CID,3,0);		//å‘é€CMD2,å–å¾—CID,é•¿å“åº”	 
+		errorstatus=CmdResp2Error(); 					//ç­‰å¾…R2å“åº”   
+		if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯		    
  		CID_Tab[0]=SDMMC1->RESP1;
 		CID_Tab[1]=SDMMC1->RESP2;
 		CID_Tab[2]=SDMMC1->RESP3;
 		CID_Tab[3]=SDMMC1->RESP4;
 	}
-	if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(SECURE_DIGITAL_IO_COMBO_CARD==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))//ÅĞ¶Ï¿¨ÀàĞÍ
+	if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(SECURE_DIGITAL_IO_COMBO_CARD==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))//åˆ¤æ–­å¡ç±»å‹
 	{
-		SDMMC_Send_Cmd(SD_CMD_SET_REL_ADDR,1,0);			//·¢ËÍCMD3,¶ÌÏìÓ¦ 
-		errorstatus=CmdResp6Error(SD_CMD_SET_REL_ADDR,&rca);//µÈ´ıR6ÏìÓ¦ 
-		if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó		    
+		SDMMC_Send_Cmd(SD_CMD_SET_REL_ADDR,1,0);			//å‘é€CMD3,çŸ­å“åº” 
+		errorstatus=CmdResp6Error(SD_CMD_SET_REL_ADDR,&rca);//ç­‰å¾…R6å“åº” 
+		if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯		    
 	}   
     if (MULTIMEDIA_CARD==CardType)
     {
- 		SDMMC_Send_Cmd(SD_CMD_SET_REL_ADDR,1,(u32)(rca<<16));//·¢ËÍCMD3,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp2Error(); 					//µÈ´ıR2ÏìÓ¦   
-		if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó	 
+ 		SDMMC_Send_Cmd(SD_CMD_SET_REL_ADDR,1,(u32)(rca<<16));//å‘é€CMD3,çŸ­å“åº” 	   
+		errorstatus=CmdResp2Error(); 					//ç­‰å¾…R2å“åº”   
+		if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯	 
     }
-	if (SECURE_DIGITAL_IO_CARD!=CardType)			//·ÇSECURE_DIGITAL_IO_CARD
+	if (SECURE_DIGITAL_IO_CARD!=CardType)			//éSECURE_DIGITAL_IO_CARD
 	{
 		RCA = rca;
-		SDMMC_Send_Cmd(SD_CMD_SEND_CSD,3,(u32)(rca<<16));//·¢ËÍCMD9+¿¨RCA,È¡µÃCSD,³¤ÏìÓ¦ 	   
-		errorstatus=CmdResp2Error(); 					//µÈ´ıR2ÏìÓ¦   
-		if(errorstatus!=SD_OK)return errorstatus;   	//ÏìÓ¦´íÎó		    
+		SDMMC_Send_Cmd(SD_CMD_SEND_CSD,3,(u32)(rca<<16));//å‘é€CMD9+å¡RCA,å–å¾—CSD,é•¿å“åº” 	   
+		errorstatus=CmdResp2Error(); 					//ç­‰å¾…R2å“åº”   
+		if(errorstatus!=SD_OK)return errorstatus;   	//å“åº”é”™è¯¯		    
   		CSD_Tab[0]=SDMMC1->RESP1;
 		CSD_Tab[1]=SDMMC1->RESP2;
 		CSD_Tab[2]=SDMMC1->RESP3;						
 		CSD_Tab[3]=SDMMC1->RESP4;					    
 	}
-	return SD_OK;//¿¨³õÊ¼»¯³É¹¦
+	return SD_OK;//å¡åˆå§‹åŒ–æˆåŠŸ
 } 
-//µÃµ½¿¨ĞÅÏ¢
-//cardinfo:¿¨ĞÅÏ¢´æ´¢Çø
-//·µ»ØÖµ:´íÎó×´Ì¬
+//å¾—åˆ°å¡ä¿¡æ¯
+//cardinfo:å¡ä¿¡æ¯å­˜å‚¨åŒº
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€
 SD_Error SD_GetCardInfo(SD_CardInfo *cardinfo)
 {
  	SD_Error errorstatus=SD_OK;
 	u8 tmp=0;	   
-	cardinfo->CardType=(u8)CardType; 				//¿¨ÀàĞÍ
-	cardinfo->RCA=(u16)RCA;							//¿¨RCAÖµ
+	cardinfo->CardType=(u8)CardType; 				//å¡ç±»å‹
+	cardinfo->RCA=(u16)RCA;							//å¡RCAå€¼
 	tmp=(u8)((CSD_Tab[0]&0xFF000000)>>24);
-	cardinfo->SD_csd.CSDStruct=(tmp&0xC0)>>6;		//CSD½á¹¹
-	cardinfo->SD_csd.SysSpecVersion=(tmp&0x3C)>>2;	//2.0Ğ­Òé»¹Ã»¶¨ÒåÕâ²¿·Ö(Îª±£Áô),Ó¦¸ÃÊÇºóĞøĞ­Òé¶¨ÒåµÄ
-	cardinfo->SD_csd.Reserved1=tmp&0x03;			//2¸ö±£ÁôÎ»  
-	tmp=(u8)((CSD_Tab[0]&0x00FF0000)>>16);			//µÚ1¸ö×Ö½Ú
-	cardinfo->SD_csd.TAAC=tmp;				   		//Êı¾İ¶ÁÊ±¼ä1
-	tmp=(u8)((CSD_Tab[0]&0x0000FF00)>>8);	  		//µÚ2¸ö×Ö½Ú
-	cardinfo->SD_csd.NSAC=tmp;		  				//Êı¾İ¶ÁÊ±¼ä2
-	tmp=(u8)(CSD_Tab[0]&0x000000FF);				//µÚ3¸ö×Ö½Ú
-	cardinfo->SD_csd.MaxBusClkFrec=tmp;		  		//´«ÊäËÙ¶È	   
-	tmp=(u8)((CSD_Tab[1]&0xFF000000)>>24);			//µÚ4¸ö×Ö½Ú
-	cardinfo->SD_csd.CardComdClasses=tmp<<4;    	//¿¨Ö¸ÁîÀà¸ßËÄÎ»
-	tmp=(u8)((CSD_Tab[1]&0x00FF0000)>>16);	 		//µÚ5¸ö×Ö½Ú
-	cardinfo->SD_csd.CardComdClasses|=(tmp&0xF0)>>4;//¿¨Ö¸ÁîÀàµÍËÄÎ»
-	cardinfo->SD_csd.RdBlockLen=tmp&0x0F;	    	//×î´ó¶ÁÈ¡Êı¾İ³¤¶È
-	tmp=(u8)((CSD_Tab[1]&0x0000FF00)>>8);			//µÚ6¸ö×Ö½Ú
-	cardinfo->SD_csd.PartBlockRead=(tmp&0x80)>>7;	//ÔÊĞí·Ö¿é¶Á
-	cardinfo->SD_csd.WrBlockMisalign=(tmp&0x40)>>6;	//Ğ´¿é´íÎ»
-	cardinfo->SD_csd.RdBlockMisalign=(tmp&0x20)>>5;	//¶Á¿é´íÎ»
+	cardinfo->SD_csd.CSDStruct=(tmp&0xC0)>>6;		//CSDç»“æ„
+	cardinfo->SD_csd.SysSpecVersion=(tmp&0x3C)>>2;	//2.0åè®®è¿˜æ²¡å®šä¹‰è¿™éƒ¨åˆ†(ä¸ºä¿ç•™),åº”è¯¥æ˜¯åç»­åè®®å®šä¹‰çš„
+	cardinfo->SD_csd.Reserved1=tmp&0x03;			//2ä¸ªä¿ç•™ä½  
+	tmp=(u8)((CSD_Tab[0]&0x00FF0000)>>16);			//ç¬¬1ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.TAAC=tmp;				   		//æ•°æ®è¯»æ—¶é—´1
+	tmp=(u8)((CSD_Tab[0]&0x0000FF00)>>8);	  		//ç¬¬2ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.NSAC=tmp;		  				//æ•°æ®è¯»æ—¶é—´2
+	tmp=(u8)(CSD_Tab[0]&0x000000FF);				//ç¬¬3ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.MaxBusClkFrec=tmp;		  		//ä¼ è¾“é€Ÿåº¦	   
+	tmp=(u8)((CSD_Tab[1]&0xFF000000)>>24);			//ç¬¬4ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.CardComdClasses=tmp<<4;    	//å¡æŒ‡ä»¤ç±»é«˜å››ä½
+	tmp=(u8)((CSD_Tab[1]&0x00FF0000)>>16);	 		//ç¬¬5ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.CardComdClasses|=(tmp&0xF0)>>4;//å¡æŒ‡ä»¤ç±»ä½å››ä½
+	cardinfo->SD_csd.RdBlockLen=tmp&0x0F;	    	//æœ€å¤§è¯»å–æ•°æ®é•¿åº¦
+	tmp=(u8)((CSD_Tab[1]&0x0000FF00)>>8);			//ç¬¬6ä¸ªå­—èŠ‚
+	cardinfo->SD_csd.PartBlockRead=(tmp&0x80)>>7;	//å…è®¸åˆ†å—è¯»
+	cardinfo->SD_csd.WrBlockMisalign=(tmp&0x40)>>6;	//å†™å—é”™ä½
+	cardinfo->SD_csd.RdBlockMisalign=(tmp&0x20)>>5;	//è¯»å—é”™ä½
 	cardinfo->SD_csd.DSRImpl=(tmp&0x10)>>4;
-	cardinfo->SD_csd.Reserved2=0; 					//±£Áô
- 	if((CardType==STD_CAPACITY_SD_CARD_V1_1)||(CardType==STD_CAPACITY_SD_CARD_V2_0)||(MULTIMEDIA_CARD==CardType))//±ê×¼1.1/2.0¿¨/MMC¿¨
+	cardinfo->SD_csd.Reserved2=0; 					//ä¿ç•™
+ 	if((CardType==STD_CAPACITY_SD_CARD_V1_1)||(CardType==STD_CAPACITY_SD_CARD_V2_0)||(MULTIMEDIA_CARD==CardType))//æ ‡å‡†1.1/2.0å¡/MMCå¡
 	{
-		cardinfo->SD_csd.DeviceSize=(tmp&0x03)<<10;	//C_SIZE(12Î»)
-	 	tmp=(u8)(CSD_Tab[1]&0x000000FF); 			//µÚ7¸ö×Ö½Ú	
+		cardinfo->SD_csd.DeviceSize=(tmp&0x03)<<10;	//C_SIZE(12ä½)
+	 	tmp=(u8)(CSD_Tab[1]&0x000000FF); 			//ç¬¬7ä¸ªå­—èŠ‚	
 		cardinfo->SD_csd.DeviceSize|=(tmp)<<2;
- 		tmp=(u8)((CSD_Tab[2]&0xFF000000)>>24);		//µÚ8¸ö×Ö½Ú	
+ 		tmp=(u8)((CSD_Tab[2]&0xFF000000)>>24);		//ç¬¬8ä¸ªå­—èŠ‚	
 		cardinfo->SD_csd.DeviceSize|=(tmp&0xC0)>>6;
  		cardinfo->SD_csd.MaxRdCurrentVDDMin=(tmp&0x38)>>3;
 		cardinfo->SD_csd.MaxRdCurrentVDDMax=(tmp&0x07);
- 		tmp=(u8)((CSD_Tab[2]&0x00FF0000)>>16);		//µÚ9¸ö×Ö½Ú	
+ 		tmp=(u8)((CSD_Tab[2]&0x00FF0000)>>16);		//ç¬¬9ä¸ªå­—èŠ‚	
 		cardinfo->SD_csd.MaxWrCurrentVDDMin=(tmp&0xE0)>>5;
 		cardinfo->SD_csd.MaxWrCurrentVDDMax=(tmp&0x1C)>>2;
 		cardinfo->SD_csd.DeviceSizeMul=(tmp&0x03)<<1;//C_SIZE_MULT
- 		tmp=(u8)((CSD_Tab[2]&0x0000FF00)>>8);	  	//µÚ10¸ö×Ö½Ú	
+ 		tmp=(u8)((CSD_Tab[2]&0x0000FF00)>>8);	  	//ç¬¬10ä¸ªå­—èŠ‚	
 		cardinfo->SD_csd.DeviceSizeMul|=(tmp&0x80)>>7;
- 		cardinfo->CardCapacity=(cardinfo->SD_csd.DeviceSize+1);//¼ÆËã¿¨ÈİÁ¿
+ 		cardinfo->CardCapacity=(cardinfo->SD_csd.DeviceSize+1);//è®¡ç®—å¡å®¹é‡
 		cardinfo->CardCapacity*=(1<<(cardinfo->SD_csd.DeviceSizeMul+2));
-		cardinfo->CardBlockSize=1<<(cardinfo->SD_csd.RdBlockLen);//¿é´óĞ¡
+		cardinfo->CardBlockSize=1<<(cardinfo->SD_csd.RdBlockLen);//å—å¤§å°
 		cardinfo->CardCapacity*=cardinfo->CardBlockSize;
-	}else if(CardType==HIGH_CAPACITY_SD_CARD)	//¸ßÈİÁ¿¿¨
+	}else if(CardType==HIGH_CAPACITY_SD_CARD)	//é«˜å®¹é‡å¡
 	{
- 		tmp=(u8)(CSD_Tab[1]&0x000000FF); 		//µÚ7¸ö×Ö½Ú	
+ 		tmp=(u8)(CSD_Tab[1]&0x000000FF); 		//ç¬¬7ä¸ªå­—èŠ‚	
 		cardinfo->SD_csd.DeviceSize=(tmp&0x3F)<<16;//C_SIZE
- 		tmp=(u8)((CSD_Tab[2]&0xFF000000)>>24); 	//µÚ8¸ö×Ö½Ú	
+ 		tmp=(u8)((CSD_Tab[2]&0xFF000000)>>24); 	//ç¬¬8ä¸ªå­—èŠ‚	
  		cardinfo->SD_csd.DeviceSize|=(tmp<<8);
- 		tmp=(u8)((CSD_Tab[2]&0x00FF0000)>>16);	//µÚ9¸ö×Ö½Ú	
+ 		tmp=(u8)((CSD_Tab[2]&0x00FF0000)>>16);	//ç¬¬9ä¸ªå­—èŠ‚	
  		cardinfo->SD_csd.DeviceSize|=(tmp);
- 		tmp=(u8)((CSD_Tab[2]&0x0000FF00)>>8); 	//µÚ10¸ö×Ö½Ú	
- 		cardinfo->CardCapacity=(long long)(cardinfo->SD_csd.DeviceSize+1)*512*1024;//¼ÆËã¿¨ÈİÁ¿
-		cardinfo->CardBlockSize=512; 			//¿é´óĞ¡¹Ì¶¨Îª512×Ö½Ú
+ 		tmp=(u8)((CSD_Tab[2]&0x0000FF00)>>8); 	//ç¬¬10ä¸ªå­—èŠ‚	
+ 		cardinfo->CardCapacity=(long long)(cardinfo->SD_csd.DeviceSize+1)*512*1024;//è®¡ç®—å¡å®¹é‡
+		cardinfo->CardBlockSize=512; 			//å—å¤§å°å›ºå®šä¸º512å­—èŠ‚
 	}	  
 	cardinfo->SD_csd.EraseGrSize=(tmp&0x40)>>6;
 	cardinfo->SD_csd.EraseGrMul=(tmp&0x3F)<<1;	   
-	tmp=(u8)(CSD_Tab[2]&0x000000FF);			//µÚ11¸ö×Ö½Ú	
+	tmp=(u8)(CSD_Tab[2]&0x000000FF);			//ç¬¬11ä¸ªå­—èŠ‚	
 	cardinfo->SD_csd.EraseGrMul|=(tmp&0x80)>>7;
 	cardinfo->SD_csd.WrProtectGrSize=(tmp&0x7F);
- 	tmp=(u8)((CSD_Tab[3]&0xFF000000)>>24);		//µÚ12¸ö×Ö½Ú	
+ 	tmp=(u8)((CSD_Tab[3]&0xFF000000)>>24);		//ç¬¬12ä¸ªå­—èŠ‚	
 	cardinfo->SD_csd.WrProtectGrEnable=(tmp&0x80)>>7;
 	cardinfo->SD_csd.ManDeflECC=(tmp&0x60)>>5;
 	cardinfo->SD_csd.WrSpeedFact=(tmp&0x1C)>>2;
 	cardinfo->SD_csd.MaxWrBlockLen=(tmp&0x03)<<2;	 
-	tmp=(u8)((CSD_Tab[3]&0x00FF0000)>>16);		//µÚ13¸ö×Ö½Ú
+	tmp=(u8)((CSD_Tab[3]&0x00FF0000)>>16);		//ç¬¬13ä¸ªå­—èŠ‚
 	cardinfo->SD_csd.MaxWrBlockLen|=(tmp&0xC0)>>6;
 	cardinfo->SD_csd.WriteBlockPaPartial=(tmp&0x20)>>5;
 	cardinfo->SD_csd.Reserved3=0;
 	cardinfo->SD_csd.ContentProtectAppli=(tmp&0x01);  
-	tmp=(u8)((CSD_Tab[3]&0x0000FF00)>>8);		//µÚ14¸ö×Ö½Ú
+	tmp=(u8)((CSD_Tab[3]&0x0000FF00)>>8);		//ç¬¬14ä¸ªå­—èŠ‚
 	cardinfo->SD_csd.FileFormatGrouop=(tmp&0x80)>>7;
 	cardinfo->SD_csd.CopyFlag=(tmp&0x40)>>6;
 	cardinfo->SD_csd.PermWrProtect=(tmp&0x20)>>5;
 	cardinfo->SD_csd.TempWrProtect=(tmp&0x10)>>4;
 	cardinfo->SD_csd.FileFormat=(tmp&0x0C)>>2;
 	cardinfo->SD_csd.ECC=(tmp&0x03);  
-	tmp=(u8)(CSD_Tab[3]&0x000000FF);			//µÚ15¸ö×Ö½Ú
+	tmp=(u8)(CSD_Tab[3]&0x000000FF);			//ç¬¬15ä¸ªå­—èŠ‚
 	cardinfo->SD_csd.CSD_CRC=(tmp&0xFE)>>1;
 	cardinfo->SD_csd.Reserved4=1;		 
-	tmp=(u8)((CID_Tab[0]&0xFF000000)>>24);		//µÚ0¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[0]&0xFF000000)>>24);		//ç¬¬0ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ManufacturerID=tmp;		    
-	tmp=(u8)((CID_Tab[0]&0x00FF0000)>>16);		//µÚ1¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[0]&0x00FF0000)>>16);		//ç¬¬1ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.OEM_AppliID=tmp<<8;	  
-	tmp=(u8)((CID_Tab[0]&0x000000FF00)>>8);		//µÚ2¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[0]&0x000000FF00)>>8);		//ç¬¬2ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.OEM_AppliID|=tmp;	    
-	tmp=(u8)(CID_Tab[0]&0x000000FF);			//µÚ3¸ö×Ö½Ú	
+	tmp=(u8)(CID_Tab[0]&0x000000FF);			//ç¬¬3ä¸ªå­—èŠ‚	
 	cardinfo->SD_cid.ProdName1=tmp<<24;				  
-	tmp=(u8)((CID_Tab[1]&0xFF000000)>>24); 		//µÚ4¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[1]&0xFF000000)>>24); 		//ç¬¬4ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdName1|=tmp<<16;	  
-	tmp=(u8)((CID_Tab[1]&0x00FF0000)>>16);	   	//µÚ5¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[1]&0x00FF0000)>>16);	   	//ç¬¬5ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdName1|=tmp<<8;		 
-	tmp=(u8)((CID_Tab[1]&0x0000FF00)>>8);		//µÚ6¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[1]&0x0000FF00)>>8);		//ç¬¬6ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdName1|=tmp;		   
-	tmp=(u8)(CID_Tab[1]&0x000000FF);	  		//µÚ7¸ö×Ö½Ú
+	tmp=(u8)(CID_Tab[1]&0x000000FF);	  		//ç¬¬7ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdName2=tmp;			  
-	tmp=(u8)((CID_Tab[2]&0xFF000000)>>24); 		//µÚ8¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[2]&0xFF000000)>>24); 		//ç¬¬8ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdRev=tmp;		 
-	tmp=(u8)((CID_Tab[2]&0x00FF0000)>>16);		//µÚ9¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[2]&0x00FF0000)>>16);		//ç¬¬9ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdSN=tmp<<24;	   
-	tmp=(u8)((CID_Tab[2]&0x0000FF00)>>8); 		//µÚ10¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[2]&0x0000FF00)>>8); 		//ç¬¬10ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdSN|=tmp<<16;	   
-	tmp=(u8)(CID_Tab[2]&0x000000FF);   			//µÚ11¸ö×Ö½Ú
+	tmp=(u8)(CID_Tab[2]&0x000000FF);   			//ç¬¬11ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdSN|=tmp<<8;		   
-	tmp=(u8)((CID_Tab[3]&0xFF000000)>>24); 		//µÚ12¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[3]&0xFF000000)>>24); 		//ç¬¬12ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ProdSN|=tmp;			     
-	tmp=(u8)((CID_Tab[3]&0x00FF0000)>>16);	 	//µÚ13¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[3]&0x00FF0000)>>16);	 	//ç¬¬13ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.Reserved1|=(tmp&0xF0)>>4;
 	cardinfo->SD_cid.ManufactDate=(tmp&0x0F)<<8;    
-	tmp=(u8)((CID_Tab[3]&0x0000FF00)>>8);		//µÚ14¸ö×Ö½Ú
+	tmp=(u8)((CID_Tab[3]&0x0000FF00)>>8);		//ç¬¬14ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.ManufactDate|=tmp;		 	  
-	tmp=(u8)(CID_Tab[3]&0x000000FF);			//µÚ15¸ö×Ö½Ú
+	tmp=(u8)(CID_Tab[3]&0x000000FF);			//ç¬¬15ä¸ªå­—èŠ‚
 	cardinfo->SD_cid.CID_CRC=(tmp&0xFE)>>1;
 	cardinfo->SD_cid.Reserved2=1;	 
 	return errorstatus;
 }
-//ÉèÖÃSDMMC×ÜÏß¿í¶È(MMC¿¨²»Ö§³Ö4bitÄ£Ê½)
-//wmode:Î»¿íÄ£Ê½.0,1Î»Êı¾İ¿í¶È;1,4Î»Êı¾İ¿í¶È;2,8Î»Êı¾İ¿í¶È
-//·µ»ØÖµ:SD¿¨´íÎó×´Ì¬
+//è®¾ç½®SDMMCæ€»çº¿å®½åº¦(MMCå¡ä¸æ”¯æŒ4bitæ¨¡å¼)
+//wmode:ä½å®½æ¨¡å¼.0,1ä½æ•°æ®å®½åº¦;1,4ä½æ•°æ®å®½åº¦;2,8ä½æ•°æ®å®½åº¦
+//è¿”å›å€¼:SDå¡é”™è¯¯çŠ¶æ€
 SD_Error SD_EnableWideBusOperation(u32 wmode)
 {
   	SD_Error errorstatus=SD_OK;
 	u16 clkcr=0;
-  	if(MULTIMEDIA_CARD==CardType)return SD_UNSUPPORTED_FEATURE;//MMC¿¨²»Ö§³Ö
+  	if(MULTIMEDIA_CARD==CardType)return SD_UNSUPPORTED_FEATURE;//MMCå¡ä¸æ”¯æŒ
  	else if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))
 	{
-		if(wmode>=2)return SD_UNSUPPORTED_FEATURE;//²»Ö§³Ö8Î»Ä£Ê½
+		if(wmode>=2)return SD_UNSUPPORTED_FEATURE;//ä¸æ”¯æŒ8ä½æ¨¡å¼
  		else   
 		{
 			errorstatus=SDEnWideBus(wmode);
  			if(SD_OK==errorstatus)
 			{
-				clkcr=SDMMC1->CLKCR;	//¶ÁÈ¡CLKCRµÄÖµ
-				clkcr&=~(3<<14);		//Çå³ıÖ®Ç°µÄÎ»¿íÉèÖÃ    
-				clkcr|=(u32)wmode<<14;	//1Î»/4Î»×ÜÏß¿í¶È 
-				clkcr|=0<<17;			//²»¿ªÆôÓ²¼şÁ÷¿ØÖÆ
-				SDMMC1->CLKCR=clkcr;	//ÖØĞÂÉèÖÃCLKCRÖµ 
+				clkcr=SDMMC1->CLKCR;	//è¯»å–CLKCRçš„å€¼
+				clkcr&=~(3<<14);		//æ¸…é™¤ä¹‹å‰çš„ä½å®½è®¾ç½®    
+				clkcr|=(u32)wmode<<14;	//1ä½/4ä½æ€»çº¿å®½åº¦ 
+				clkcr|=0<<17;			//ä¸å¼€å¯ç¡¬ä»¶æµæ§åˆ¶
+				SDMMC1->CLKCR=clkcr;	//é‡æ–°è®¾ç½®CLKCRå€¼ 
 			}
 		}  
 	} 
 	return errorstatus; 
 } 
-//Ñ¡¿¨
-//·¢ËÍCMD7,Ñ¡ÔñÏà¶ÔµØÖ·(rca)ÎªaddrµÄ¿¨,È¡ÏûÆäËû¿¨.Èç¹ûÎª0,Ôò¶¼²»Ñ¡Ôñ.
-//addr:¿¨µÄRCAµØÖ·
+//é€‰å¡
+//å‘é€CMD7,é€‰æ‹©ç›¸å¯¹åœ°å€(rca)ä¸ºaddrçš„å¡,å–æ¶ˆå…¶ä»–å¡.å¦‚æœä¸º0,åˆ™éƒ½ä¸é€‰æ‹©.
+//addr:å¡çš„RCAåœ°å€
 SD_Error SD_SelectDeselect(u32 addr)
 {
- 	SDMMC_Send_Cmd(SD_CMD_SEL_DESEL_CARD,1,addr);	//·¢ËÍCMD7,Ñ¡Ôñ¿¨,¶ÌÏìÓ¦	 	   
+ 	SDMMC_Send_Cmd(SD_CMD_SEL_DESEL_CARD,1,addr);	//å‘é€CMD7,é€‰æ‹©å¡,çŸ­å“åº”	 	   
    	return CmdResp1Error(SD_CMD_SEL_DESEL_CARD);	  
 }  
-//SD¿¨¶ÁÈ¡µ¥¸ö/¶à¸ö¿é 
-//buf:¶ÁÊı¾İ»º´æÇø
-//addr:¶ÁÈ¡µØÖ·
-//blksize:¿é´óĞ¡
-//nblks:Òª¶ÁÈ¡µÄ¿éÊı,1,±íÊ¾¶ÁÈ¡µ¥¸ö¿é
-//·µ»ØÖµ:´íÎó×´Ì¬ 
+//SDå¡è¯»å–å•ä¸ª/å¤šä¸ªå— 
+//buf:è¯»æ•°æ®ç¼“å­˜åŒº
+//addr:è¯»å–åœ°å€
+//blksize:å—å¤§å°
+//nblks:è¦è¯»å–çš„å—æ•°,1,è¡¨ç¤ºè¯»å–å•ä¸ªå—
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€ 
 SD_Error SD_ReadBlocks(u8 *buf,long long addr,u16 blksize,u32 nblks)
 {
   	SD_Error errorstatus=SD_OK; 
    	u32 count=0;
 	u32 timeout=SDMMC_DATATIMEOUT;  
-	u32 *tempbuff=(u32*)buf;	//×ª»»Îªu32Ö¸Õë 
-    SDMMC1->DCTRL=0x0;			//Êı¾İ¿ØÖÆ¼Ä´æÆ÷ÇåÁã(¹ØDMA)   
-	if(CardType==HIGH_CAPACITY_SD_CARD)//´óÈİÁ¿¿¨
+	u32 *tempbuff=(u32*)buf;	//è½¬æ¢ä¸ºu32æŒ‡é’ˆ 
+    SDMMC1->DCTRL=0x0;			//æ•°æ®æ§åˆ¶å¯„å­˜å™¨æ¸…é›¶(å…³DMA)   
+	if(CardType==HIGH_CAPACITY_SD_CARD)//å¤§å®¹é‡å¡
 	{
 		blksize=512;
 		addr>>=9;
 	}     
-	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,blksize);			//·¢ËÍCMD16+ÉèÖÃÊı¾İ³¤¶ÈÎªblksize,¶ÌÏìÓ¦ 	   
-	errorstatus=CmdResp1Error(SD_CMD_SET_BLOCKLEN);			//µÈ´ıR1ÏìÓ¦   
+	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,blksize);			//å‘é€CMD16+è®¾ç½®æ•°æ®é•¿åº¦ä¸ºblksize,çŸ­å“åº” 	   
+	errorstatus=CmdResp1Error(SD_CMD_SET_BLOCKLEN);			//ç­‰å¾…R1å“åº”   
 	if(errorstatus!=SD_OK)
     {
         printf("SDMMC_Send_Cmd=%d\r\n",errorstatus);
-        return errorstatus;   			//ÏìÓ¦´íÎó
+        return errorstatus;   			//å“åº”é”™è¯¯
     }
-	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,nblks*blksize,9,1);	//nblks*blksize,¿é´óĞ¡ºãÎª512,¿¨µ½¿ØÖÆÆ÷	 
-	SDMMC1->CMD|=1<<6;										//CMDTRANS=1,²úÉúÒ»¸öÊı¾İ´«ÊäÃüÁî
-	if(nblks>1)												//¶à¿é¶Á  
+	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,nblks*blksize,9,1);	//nblks*blksize,å—å¤§å°æ’ä¸º512,å¡åˆ°æ§åˆ¶å™¨	 
+	SDMMC1->CMD|=1<<6;										//CMDTRANS=1,äº§ç”Ÿä¸€ä¸ªæ•°æ®ä¼ è¾“å‘½ä»¤
+	if(nblks>1)												//å¤šå—è¯»  
 	{									    
-		SDMMC_Send_Cmd(SD_CMD_READ_MULT_BLOCK,1,addr);		//·¢ËÍCMD18+´ÓaddrµØÖ·³ö¶ÁÈ¡Êı¾İ,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp1Error(SD_CMD_READ_MULT_BLOCK);	//µÈ´ıR1ÏìÓ¦   
+		SDMMC_Send_Cmd(SD_CMD_READ_MULT_BLOCK,1,addr);		//å‘é€CMD18+ä»addråœ°å€å‡ºè¯»å–æ•°æ®,çŸ­å“åº” 	   
+		errorstatus=CmdResp1Error(SD_CMD_READ_MULT_BLOCK);	//ç­‰å¾…R1å“åº”   
 		if(errorstatus!=SD_OK)
 		{	
 			printf("SD_CMD_READ_MULT_BLOCK Error\r\n");
-			return errorstatus;   		//ÏìÓ¦´íÎó	 
+			return errorstatus;   		//å“åº”é”™è¯¯	 
 		}
-	}else													//µ¥¿é¶Á
+	}else													//å•å—è¯»
 	{ 
-		SDMMC_Send_Cmd(SD_CMD_READ_SINGLE_BLOCK,1,addr);		//·¢ËÍCMD17+´ÓaddrµØÖ·³ö¶ÁÈ¡Êı¾İ,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp1Error(SD_CMD_READ_SINGLE_BLOCK);//µÈ´ıR1ÏìÓ¦   
-		if(errorstatus!=SD_OK)return errorstatus;   		//ÏìÓ¦´íÎó	 
+		SDMMC_Send_Cmd(SD_CMD_READ_SINGLE_BLOCK,1,addr);		//å‘é€CMD17+ä»addråœ°å€å‡ºè¯»å–æ•°æ®,çŸ­å“åº” 	   
+		errorstatus=CmdResp1Error(SD_CMD_READ_SINGLE_BLOCK);//ç­‰å¾…R1å“åº”   
+		if(errorstatus!=SD_OK)return errorstatus;   		//å“åº”é”™è¯¯	 
 	} 
-	INTX_DISABLE();//¹Ø±Õ×ÜÖĞ¶Ï(POLLINGÄ£Ê½,ÑÏ½ûÖĞ¶Ï´ò¶ÏSDMMC¶ÁĞ´²Ù×÷!!!)
-	while(!(SDMMC1->STA&((1<<5)|(1<<1)|(1<<3)|(1<<8))))//ÎŞÉÏÒç/CRC/³¬Ê±/Íê³É(±êÖ¾)
+	INTX_DISABLE();//å…³é—­æ€»ä¸­æ–­(POLLINGæ¨¡å¼,ä¸¥ç¦ä¸­æ–­æ‰“æ–­SDMMCè¯»å†™æ“ä½œ!!!)
+	while(!(SDMMC1->STA&((1<<5)|(1<<1)|(1<<3)|(1<<8))))//æ— ä¸Šæº¢/CRC/è¶…æ—¶/å®Œæˆ(æ ‡å¿—)
 	{
-		if(SDMMC1->STA&(1<<15))						//½ÓÊÕÇø°ëÂú,±íÊ¾ÖÁÉÙ´æÁË8¸ö×Ö
+		if(SDMMC1->STA&(1<<15))						//æ¥æ”¶åŒºåŠæ»¡,è¡¨ç¤ºè‡³å°‘å­˜äº†8ä¸ªå­—
 		{
-			for(count=0;count<8;count++)			//Ñ­»·¶ÁÈ¡Êı¾İ
+			for(count=0;count<8;count++)			//å¾ªç¯è¯»å–æ•°æ®
 			{
 				*(tempbuff+count)=SDMMC1->FIFO;
 			}
 			tempbuff+=8;	 
-			timeout=0X7FFFFF; 	//¶ÁÊı¾İÒç³öÊ±¼ä
-		}else 	//´¦Àí³¬Ê±
+			timeout=0X7FFFFF; 	//è¯»æ•°æ®æº¢å‡ºæ—¶é—´
+		}else 	//å¤„ç†è¶…æ—¶
 		{
 			if(timeout==0)return SD_DATA_TIMEOUT;
 			timeout--;
 		}
 	} 
-	SDMMC1->CMD&=~(1<<6);		//CMDTRANS=0,½áÊøÊı¾İ´«Êä
-	INTX_ENABLE();				//¿ªÆô×ÜÖĞ¶Ï
-	if(SDMMC1->STA&(1<<3))		//Êı¾İ³¬Ê±´íÎó
+	SDMMC1->CMD&=~(1<<6);		//CMDTRANS=0,ç»“æŸæ•°æ®ä¼ è¾“
+	INTX_ENABLE();				//å¼€å¯æ€»ä¸­æ–­
+	if(SDMMC1->STA&(1<<3))		//æ•°æ®è¶…æ—¶é”™è¯¯
 	{										   
-		SDMMC1->ICR|=1<<3; 		//Çå´íÎó±êÖ¾
+		SDMMC1->ICR|=1<<3; 		//æ¸…é”™è¯¯æ ‡å¿—
 		return SD_DATA_TIMEOUT;
-	}else if(SDMMC1->STA&(1<<1))//Êı¾İ¿éCRC´íÎó
+	}else if(SDMMC1->STA&(1<<1))//æ•°æ®å—CRCé”™è¯¯
 	{
-		SDMMC1->ICR|=1<<1; 		//Çå´íÎó±êÖ¾
-		if(nblks>1)				//Õë¶Ô¿ÉÄÜ³öÏÖµÄCRC´íÎó,Èç¹ûÊÇ¶à¿é¶ÁÈ¡,±ØĞë·¢ËÍ½áÊø´«ÊäÃüÁî!
+		SDMMC1->ICR|=1<<1; 		//æ¸…é”™è¯¯æ ‡å¿—
+		if(nblks>1)				//é’ˆå¯¹å¯èƒ½å‡ºç°çš„CRCé”™è¯¯,å¦‚æœæ˜¯å¤šå—è¯»å–,å¿…é¡»å‘é€ç»“æŸä¼ è¾“å‘½ä»¤!
 		{
-			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//·¢ËÍCMD12+½áÊø´«Êä 	   
-			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//µÈ´ıR1ÏìÓ¦   
+			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//å‘é€CMD12+ç»“æŸä¼ è¾“ 	   
+			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//ç­‰å¾…R1å“åº”   
 		}				
 		return SD_DATA_CRC_FAIL;		   
-	}else if(SDMMC1->STA&(1<<5))//½ÓÊÕfifoÉÏÒç´íÎó
+	}else if(SDMMC1->STA&(1<<5))//æ¥æ”¶fifoä¸Šæº¢é”™è¯¯
 	{
-		SDMMC1->ICR|=1<<5; 		//Çå´íÎó±êÖ¾
+		SDMMC1->ICR|=1<<5; 		//æ¸…é”™è¯¯æ ‡å¿—
 		return SD_RX_OVERRUN;		 
 	}  
-	if((SDMMC1->STA&(1<<8))&&(nblks>1))//¶à¿é½ÓÊÕ½áÊø,·¢ËÍ½áÊøÖ¸Áî
+	if((SDMMC1->STA&(1<<8))&&(nblks>1))//å¤šå—æ¥æ”¶ç»“æŸ,å‘é€ç»“æŸæŒ‡ä»¤
 	{
 		if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))
 		{
-			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//·¢ËÍCMD12+½áÊø´«Êä 	   
-			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//µÈ´ıR1ÏìÓ¦   
+			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//å‘é€CMD12+ç»“æŸä¼ è¾“ 	   
+			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//ç­‰å¾…R1å“åº”   
 			if(errorstatus!=SD_OK)return errorstatus;	 
 		}
 	}
-	SDMMC1->ICR=0X1FE00FFF;	 		//Çå³ıËùÓĞ±ê¼Ç 
+	SDMMC1->ICR=0X1FE00FFF;	 		//æ¸…é™¤æ‰€æœ‰æ ‡è®° 
 	return errorstatus;
 }	
  		    																  
-//SD¿¨Ğ´µ¥¸ö/¶à¸ö¿é 
-//buf:Êı¾İ»º´æÇø
-//addr:Ğ´µØÖ·
-//blksize:¿é´óĞ¡
-//nblks:Òª¶ÁÈ¡µÄ¿éÊı,1,±íÊ¾¶ÁÈ¡µ¥¸ö¿é
-//·µ»ØÖµ:´íÎó×´Ì¬												   
+//SDå¡å†™å•ä¸ª/å¤šä¸ªå— 
+//buf:æ•°æ®ç¼“å­˜åŒº
+//addr:å†™åœ°å€
+//blksize:å—å¤§å°
+//nblks:è¦è¯»å–çš„å—æ•°,1,è¡¨ç¤ºè¯»å–å•ä¸ªå—
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€												   
 SD_Error SD_WriteBlocks(u8 *buf,long long addr,u16 blksize,u32 nblks)
 {
 	SD_Error errorstatus = SD_OK;
 	u8  cardstate=0;
 	u32 timeout=0,bytestransferred=0;
 	u32 cardstatus=0,count=0,restwords=0;
-	u32 tlen=nblks*blksize;						//×Ü³¤¶È(×Ö½Ú)
+	u32 tlen=nblks*blksize;						//æ€»é•¿åº¦(å­—èŠ‚)
 	u32*tempbuff=(u32*)buf;								 
- 	if(buf==NULL)return SD_INVALID_PARAMETER;	//²ÎÊı´íÎó   
-  	SDMMC1->DCTRL=0x0;							//Êı¾İ¿ØÖÆ¼Ä´æÆ÷ÇåÁã(¹ØDMA)    
- 	if(CardType==HIGH_CAPACITY_SD_CARD)			//´óÈİÁ¿¿¨
+ 	if(buf==NULL)return SD_INVALID_PARAMETER;	//å‚æ•°é”™è¯¯   
+  	SDMMC1->DCTRL=0x0;							//æ•°æ®æ§åˆ¶å¯„å­˜å™¨æ¸…é›¶(å…³DMA)    
+ 	if(CardType==HIGH_CAPACITY_SD_CARD)			//å¤§å®¹é‡å¡
 	{
 		blksize=512;
 		addr>>=9;
 	}     
-	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,blksize);			//·¢ËÍCMD16+ÉèÖÃÊı¾İ³¤¶ÈÎªblksize,¶ÌÏìÓ¦ 	   
-	errorstatus=CmdResp1Error(SD_CMD_SET_BLOCKLEN);			//µÈ´ıR1ÏìÓ¦   
-	if(errorstatus!=SD_OK)return errorstatus;   			//ÏìÓ¦´íÎó  
-	if(nblks>1)												//¶à¿éĞ´
+	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,blksize);			//å‘é€CMD16+è®¾ç½®æ•°æ®é•¿åº¦ä¸ºblksize,çŸ­å“åº” 	   
+	errorstatus=CmdResp1Error(SD_CMD_SET_BLOCKLEN);			//ç­‰å¾…R1å“åº”   
+	if(errorstatus!=SD_OK)return errorstatus;   			//å“åº”é”™è¯¯  
+	if(nblks>1)												//å¤šå—å†™
 	{									     
 		if(nblks*blksize>SD_MAX_DATA_LENGTH)return SD_INVALID_PARAMETER;   
      	if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))
     	{
-			//Ìá¸ßĞÔÄÜ
-	 	   	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)RCA<<16);	//·¢ËÍACMD55,¶ÌÏìÓ¦ 	   
-			errorstatus=CmdResp1Error(SD_CMD_APP_CMD);		//µÈ´ıR1ÏìÓ¦   		   
+			//æé«˜æ€§èƒ½
+	 	   	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)RCA<<16);	//å‘é€ACMD55,çŸ­å“åº” 	   
+			errorstatus=CmdResp1Error(SD_CMD_APP_CMD);		//ç­‰å¾…R1å“åº”   		   
 			if(errorstatus!=SD_OK)return errorstatus;				    
-	 	   	SDMMC_Send_Cmd(SD_CMD_SET_BLOCK_COUNT,1,nblks);	//·¢ËÍCMD23,ÉèÖÃ¿éÊıÁ¿,¶ÌÏìÓ¦ 	   
-			errorstatus=CmdResp1Error(SD_CMD_SET_BLOCK_COUNT);//µÈ´ıR1ÏìÓ¦   		   
+	 	   	SDMMC_Send_Cmd(SD_CMD_SET_BLOCK_COUNT,1,nblks);	//å‘é€CMD23,è®¾ç½®å—æ•°é‡,çŸ­å“åº” 	   
+			errorstatus=CmdResp1Error(SD_CMD_SET_BLOCK_COUNT);//ç­‰å¾…R1å“åº”   		   
 			if(errorstatus!=SD_OK)return errorstatus;				    
 		} 
-		SDMMC_Send_Cmd(SD_CMD_WRITE_MULT_BLOCK,1,addr);		//·¢ËÍCMD25,¶à¿éĞ´Ö¸Áî,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp1Error(SD_CMD_WRITE_MULT_BLOCK);	//µÈ´ıR1ÏìÓ¦    
-	}else													//µ¥¿éĞ´		
+		SDMMC_Send_Cmd(SD_CMD_WRITE_MULT_BLOCK,1,addr);		//å‘é€CMD25,å¤šå—å†™æŒ‡ä»¤,çŸ­å“åº” 	   
+		errorstatus=CmdResp1Error(SD_CMD_WRITE_MULT_BLOCK);	//ç­‰å¾…R1å“åº”    
+	}else													//å•å—å†™		
 	{ 
-		SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);	//·¢ËÍCMD13,²éÑ¯¿¨µÄ×´Ì¬,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);		//µÈ´ıR1ÏìÓ¦   		   
+		SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);	//å‘é€CMD13,æŸ¥è¯¢å¡çš„çŠ¶æ€,çŸ­å“åº” 	   
+		errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);		//ç­‰å¾…R1å“åº”   		   
 		if(errorstatus!=SD_OK)return errorstatus;
 		cardstatus=SDMMC1->RESP1;													  
 		timeout=SD_DATATIMEOUT;
-		while(((cardstatus&0x00000100)==0)&&(timeout>0)) 	//¼ì²éREADY_FOR_DATAÎ»ÊÇ·ñÖÃÎ»
+		while(((cardstatus&0x00000100)==0)&&(timeout>0)) 	//æ£€æŸ¥READY_FOR_DATAä½æ˜¯å¦ç½®ä½
 		{
 			timeout--;
-			SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);//·¢ËÍCMD13,²éÑ¯¿¨µÄ×´Ì¬,¶ÌÏìÓ¦ 	   
-			errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);	//µÈ´ıR1ÏìÓ¦   		   
+			SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);//å‘é€CMD13,æŸ¥è¯¢å¡çš„çŠ¶æ€,çŸ­å“åº” 	   
+			errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);	//ç­‰å¾…R1å“åº”   		   
 			if(errorstatus!=SD_OK)return errorstatus;				    
 			cardstatus=SDMMC1->RESP1;													  
 		}
 		if(timeout==0)return SD_ERROR;  
-		SDMMC_Send_Cmd(SD_CMD_WRITE_SINGLE_BLOCK,1,addr);	//·¢ËÍCMD24,Ğ´µ¥¿éÖ¸Áî,¶ÌÏìÓ¦ 	   
-		errorstatus=CmdResp1Error(SD_CMD_WRITE_SINGLE_BLOCK);//µÈ´ıR1ÏìÓ¦   	
+		SDMMC_Send_Cmd(SD_CMD_WRITE_SINGLE_BLOCK,1,addr);	//å‘é€CMD24,å†™å•å—æŒ‡ä»¤,çŸ­å“åº” 	   
+		errorstatus=CmdResp1Error(SD_CMD_WRITE_SINGLE_BLOCK);//ç­‰å¾…R1å“åº”   	
 	}	   
 	if(errorstatus!=SD_OK)return errorstatus;   	   
- 	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,nblks*blksize,9,0);	//blksize,¿é´óĞ¡ºãÎª512×Ö½Ú,¿ØÖÆÆ÷µ½¿¨	  
-	SDMMC1->CMD|=1<<6;										//CMDTRANS=1,²úÉúÒ»¸öÊı¾İ´«ÊäÃüÁî
+ 	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,nblks*blksize,9,0);	//blksize,å—å¤§å°æ’ä¸º512å­—èŠ‚,æ§åˆ¶å™¨åˆ°å¡	  
+	SDMMC1->CMD|=1<<6;										//CMDTRANS=1,äº§ç”Ÿä¸€ä¸ªæ•°æ®ä¼ è¾“å‘½ä»¤
 	timeout=SDMMC_DATATIMEOUT; 
-	INTX_DISABLE();//¹Ø±Õ×ÜÖĞ¶Ï(POLLINGÄ£Ê½,ÑÏ½ûÖĞ¶Ï´ò¶ÏSDMMC¶ÁĞ´²Ù×÷!!!)
-	while(!(SDMMC1->STA&((1<<4)|(1<<1)|(1<<8)|(1<<3))))//ÏÂÒç/CRC/Êı¾İ½áÊø/³¬Ê±
+	INTX_DISABLE();//å…³é—­æ€»ä¸­æ–­(POLLINGæ¨¡å¼,ä¸¥ç¦ä¸­æ–­æ‰“æ–­SDMMCè¯»å†™æ“ä½œ!!!)
+	while(!(SDMMC1->STA&((1<<4)|(1<<1)|(1<<8)|(1<<3))))//ä¸‹æº¢/CRC/æ•°æ®ç»“æŸ/è¶…æ—¶
 	{
-		if(SDMMC1->STA&(1<<14))							//·¢ËÍÇø°ë¿Õ,±íÊ¾ÖÁÉÙ´æÁË8×Ö(32×Ö½Ú)
+		if(SDMMC1->STA&(1<<14))							//å‘é€åŒºåŠç©º,è¡¨ç¤ºè‡³å°‘å­˜äº†8å­—(32å­—èŠ‚)
 		{	  
-			if((tlen-bytestransferred)<SD_HALFFIFOBYTES)//²»¹»32×Ö½ÚÁË
+			if((tlen-bytestransferred)<SD_HALFFIFOBYTES)//ä¸å¤Ÿ32å­—èŠ‚äº†
 			{
 				restwords=((tlen-bytestransferred)%4==0)?((tlen-bytestransferred)/4):((tlen-bytestransferred)/4+1);
 				for(count=0;count<restwords;count++,tempbuff++,bytestransferred+=4)
 				{
 					SDMMC1->FIFO=*tempbuff;
 				}
-			}else 										//·¢ËÍÇø°ë¿Õ,¿ÉÒÔ·¢ËÍÖÁÉÙ8×Ö(32×Ö½Ú)Êı¾İ
+			}else 										//å‘é€åŒºåŠç©º,å¯ä»¥å‘é€è‡³å°‘8å­—(32å­—èŠ‚)æ•°æ®
 			{
 				for(count=0;count<SD_HALFFIFO;count++)
 				{
@@ -584,43 +584,43 @@ SD_Error SD_WriteBlocks(u8 *buf,long long addr,u16 blksize,u32 nblks)
 				tempbuff+=SD_HALFFIFO;
 				bytestransferred+=SD_HALFFIFOBYTES;
 			}
-			timeout=0X3FFFFFFF;		//Ğ´Êı¾İÒç³öÊ±¼ä
+			timeout=0X3FFFFFFF;		//å†™æ•°æ®æº¢å‡ºæ—¶é—´
 		}else
 		{
 			if(timeout==0)return SD_DATA_TIMEOUT; 
 			timeout--;
 		}
 	} 
-	SDMMC1->CMD&=~(1<<6);			//CMDTRANS=0,½áÊøÊı¾İ´«Êä
-	INTX_ENABLE();					//¿ªÆô×ÜÖĞ¶Ï
-	if(SDMMC1->STA&(1<<3))			//Êı¾İ³¬Ê±´íÎó
+	SDMMC1->CMD&=~(1<<6);			//CMDTRANS=0,ç»“æŸæ•°æ®ä¼ è¾“
+	INTX_ENABLE();					//å¼€å¯æ€»ä¸­æ–­
+	if(SDMMC1->STA&(1<<3))			//æ•°æ®è¶…æ—¶é”™è¯¯
 	{										   
-		SDMMC1->ICR|=1<<3; 			//Çå´íÎó±êÖ¾
+		SDMMC1->ICR|=1<<3; 			//æ¸…é”™è¯¯æ ‡å¿—
 		return SD_DATA_TIMEOUT;
-	}else if(SDMMC1->STA&(1<<1))	//Êı¾İ¿éCRC´íÎó
+	}else if(SDMMC1->STA&(1<<1))	//æ•°æ®å—CRCé”™è¯¯
 	{
-		SDMMC1->ICR|=1<<1; 			//Çå´íÎó±êÖ¾
-		if(nblks>1)					//Õë¶Ô¿ÉÄÜ³öÏÖµÄCRC´íÎó,Èç¹ûÊÇ¶à¿é¶ÁÈ¡,±ØĞë·¢ËÍ½áÊø´«ÊäÃüÁî!
+		SDMMC1->ICR|=1<<1; 			//æ¸…é”™è¯¯æ ‡å¿—
+		if(nblks>1)					//é’ˆå¯¹å¯èƒ½å‡ºç°çš„CRCé”™è¯¯,å¦‚æœæ˜¯å¤šå—è¯»å–,å¿…é¡»å‘é€ç»“æŸä¼ è¾“å‘½ä»¤!
 		{
-			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//·¢ËÍCMD12+½áÊø´«Êä 	   
-			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//µÈ´ıR1ÏìÓ¦   
+			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//å‘é€CMD12+ç»“æŸä¼ è¾“ 	   
+			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//ç­‰å¾…R1å“åº”   
 		}	
 		return SD_DATA_CRC_FAIL;		   
-	}else if(SDMMC1->STA&(1<<4)) 	//½ÓÊÕfifoÏÂÒç´íÎó
+	}else if(SDMMC1->STA&(1<<4)) 	//æ¥æ”¶fifoä¸‹æº¢é”™è¯¯
 	{
-		SDMMC1->ICR|=1<<4; 			//Çå´íÎó±êÖ¾
+		SDMMC1->ICR|=1<<4; 			//æ¸…é”™è¯¯æ ‡å¿—
 		return SD_TX_UNDERRUN;		 
 	}
-	if((SDMMC1->STA&(1<<8))&&(nblks>1))//¶à¿é·¢ËÍ½áÊø,·¢ËÍ½áÊøÖ¸Áî
+	if((SDMMC1->STA&(1<<8))&&(nblks>1))//å¤šå—å‘é€ç»“æŸ,å‘é€ç»“æŸæŒ‡ä»¤
 	{
 		if((STD_CAPACITY_SD_CARD_V1_1==CardType)||(STD_CAPACITY_SD_CARD_V2_0==CardType)||(HIGH_CAPACITY_SD_CARD==CardType))
 		{
-			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//·¢ËÍCMD12+½áÊø´«Êä 	   
-			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//µÈ´ıR1ÏìÓ¦   
+			SDMMC_Send_Cmd(SD_CMD_STOP_TRANSMISSION,1,0);		//å‘é€CMD12+ç»“æŸä¼ è¾“ 	   
+			errorstatus=CmdResp1Error(SD_CMD_STOP_TRANSMISSION);//ç­‰å¾…R1å“åº”   
 			if(errorstatus!=SD_OK)return errorstatus;	 
 		}
 	}
-	SDMMC1->ICR=0X1FE00FFF;		//Çå³ıËùÓĞ±ê¼Ç	  
+	SDMMC1->ICR=0X1FE00FFF;		//æ¸…é™¤æ‰€æœ‰æ ‡è®°	  
  	errorstatus=IsCardProgramming(&cardstate);
  	while((errorstatus==SD_OK)&&((cardstate==SD_CARD_PROGRAMMING)||(cardstate==SD_CARD_RECEIVING)))
 	{
@@ -628,22 +628,22 @@ SD_Error SD_WriteBlocks(u8 *buf,long long addr,u16 blksize,u32 nblks)
 	}   
 	return errorstatus;
 }  
-//¼ì²éCMD0µÄÖ´ĞĞ×´Ì¬
-//·µ»ØÖµ:sd¿¨´íÎóÂë
+//æ£€æŸ¥CMD0çš„æ‰§è¡ŒçŠ¶æ€
+//è¿”å›å€¼:sdå¡é”™è¯¯ç 
 SD_Error CmdError(void)
 {
 	SD_Error errorstatus = SD_OK;
 	u32 timeout=SDMMC_CMD0TIMEOUT;	   
 	while(timeout--)
 	{
-		if(SDMMC1->STA&(1<<7))break;//ÃüÁîÒÑ·¢ËÍ(ÎŞĞèÏìÓ¦)	 
+		if(SDMMC1->STA&(1<<7))break;//å‘½ä»¤å·²å‘é€(æ— éœ€å“åº”)	 
 	}	    
 	if(timeout==0)return SD_CMD_RSP_TIMEOUT;  
-	SDMMC1->ICR=0X1FE00FFF;			//Çå³ı±ê¼Ç
+	SDMMC1->ICR=0X1FE00FFF;			//æ¸…é™¤æ ‡è®°
 	return errorstatus;
 }	 
-//¼ì²éR7ÏìÓ¦µÄ´íÎó×´Ì¬
-//·µ»ØÖµ:sd¿¨´íÎóÂë
+//æ£€æŸ¥R7å“åº”çš„é”™è¯¯çŠ¶æ€
+//è¿”å›å€¼:sdå¡é”™è¯¯ç 
 SD_Error CmdResp7Error(void)
 {
 	SD_Error errorstatus=SD_OK;
@@ -652,67 +652,67 @@ SD_Error CmdResp7Error(void)
  	while(timeout--)
 	{
 		status=SDMMC1->STA;
-		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRC´íÎó/ÃüÁîÏìÓ¦³¬Ê±/ÒÑ¾­ÊÕµ½ÏìÓ¦(CRCĞ£Ñé³É¹¦)	
+		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRCé”™è¯¯/å‘½ä»¤å“åº”è¶…æ—¶/å·²ç»æ”¶åˆ°å“åº”(CRCæ ¡éªŒæˆåŠŸ)	
 	}
- 	if((timeout==0)||(status&(1<<2)))	//ÏìÓ¦³¬Ê±
+ 	if((timeout==0)||(status&(1<<2)))	//å“åº”è¶…æ—¶
 	{																				    
-		errorstatus=SD_CMD_RSP_TIMEOUT;	//µ±Ç°¿¨²»ÊÇ2.0¼æÈİ¿¨,»òÕß²»Ö§³ÖÉè¶¨µÄµçÑ¹·¶Î§
-		SDMMC1->ICR|=1<<2;				//Çå³ıÃüÁîÏìÓ¦³¬Ê±±êÖ¾
+		errorstatus=SD_CMD_RSP_TIMEOUT;	//å½“å‰å¡ä¸æ˜¯2.0å…¼å®¹å¡,æˆ–è€…ä¸æ”¯æŒè®¾å®šçš„ç”µå‹èŒƒå›´
+		SDMMC1->ICR|=1<<2;				//æ¸…é™¤å‘½ä»¤å“åº”è¶…æ—¶æ ‡å¿—
 		return errorstatus;
 	}	 
-	if(status&1<<6)						//³É¹¦½ÓÊÕµ½ÏìÓ¦
+	if(status&1<<6)						//æˆåŠŸæ¥æ”¶åˆ°å“åº”
 	{								   
 		errorstatus=SD_OK;
-		SDMMC1->ICR|=1<<6;				//Çå³ıÏìÓ¦±êÖ¾
+		SDMMC1->ICR|=1<<6;				//æ¸…é™¤å“åº”æ ‡å¿—
  	}
 	return errorstatus;
 }	   
-//¼ì²éR1ÏìÓ¦µÄ´íÎó×´Ì¬
-//cmd:µ±Ç°ÃüÁî
-//·µ»ØÖµ:sd¿¨´íÎóÂë
+//æ£€æŸ¥R1å“åº”çš„é”™è¯¯çŠ¶æ€
+//cmd:å½“å‰å‘½ä»¤
+//è¿”å›å€¼:sdå¡é”™è¯¯ç 
 SD_Error CmdResp1Error(u8 cmd)
 {	  
    	u32 status; 
 	while(1)
 	{
 		status=SDMMC1->STA;
-		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRC´íÎó/ÃüÁîÏìÓ¦³¬Ê±/ÒÑ¾­ÊÕµ½ÏìÓ¦(CRCĞ£Ñé³É¹¦)
+		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRCé”™è¯¯/å‘½ä»¤å“åº”è¶…æ—¶/å·²ç»æ”¶åˆ°å“åº”(CRCæ ¡éªŒæˆåŠŸ)
 	} 
-	if(status&(1<<2))					//ÏìÓ¦³¬Ê±
+	if(status&(1<<2))					//å“åº”è¶…æ—¶
 	{																				    
- 		SDMMC1->ICR=1<<2;				//Çå³ıÃüÁîÏìÓ¦³¬Ê±±êÖ¾
-		SDMMC1->ICR=0X1FE00FFF;				//Çå³ı±ê¼Ç
+ 		SDMMC1->ICR=1<<2;				//æ¸…é™¤å‘½ä»¤å“åº”è¶…æ—¶æ ‡å¿—
+		SDMMC1->ICR=0X1FE00FFF;				//æ¸…é™¤æ ‡è®°
 		return SD_CMD_RSP_TIMEOUT;
 	}	
- 	if(status&(1<<0))					//CRC´íÎó
+ 	if(status&(1<<0))					//CRCé”™è¯¯
 	{																				    
- 		SDMMC1->ICR=1<<0;				//Çå³ı±êÖ¾
+ 		SDMMC1->ICR=1<<0;				//æ¸…é™¤æ ‡å¿—
 		return SD_CMD_CRC_FAIL;
 	}		
-	if(SDMMC1->RESPCMD!=cmd)return SD_ILLEGAL_CMD;//ÃüÁî²»Æ¥Åä 
-  	SDMMC1->ICR=0X1FE00FFF;				//Çå³ı±ê¼Ç
-	return (SD_Error)(SDMMC1->RESP1&SD_OCR_ERRORBITS);//·µ»Ø¿¨ÏìÓ¦
+	if(SDMMC1->RESPCMD!=cmd)return SD_ILLEGAL_CMD;//å‘½ä»¤ä¸åŒ¹é… 
+  	SDMMC1->ICR=0X1FE00FFF;				//æ¸…é™¤æ ‡è®°
+	return (SD_Error)(SDMMC1->RESP1&SD_OCR_ERRORBITS);//è¿”å›å¡å“åº”
 }
-//¼ì²éR3ÏìÓ¦µÄ´íÎó×´Ì¬
-//·µ»ØÖµ:´íÎó×´Ì¬
+//æ£€æŸ¥R3å“åº”çš„é”™è¯¯çŠ¶æ€
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€
 SD_Error CmdResp3Error(void)
 {
 	u32 status;						 
  	while(1)
 	{
 		status=SDMMC1->STA;
-		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRC´íÎó/ÃüÁîÏìÓ¦³¬Ê±/ÒÑ¾­ÊÕµ½ÏìÓ¦(CRCĞ£Ñé³É¹¦)	
+		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRCé”™è¯¯/å‘½ä»¤å“åº”è¶…æ—¶/å·²ç»æ”¶åˆ°å“åº”(CRCæ ¡éªŒæˆåŠŸ)	
 	}
- 	if(status&(1<<2))					//ÏìÓ¦³¬Ê±
+ 	if(status&(1<<2))					//å“åº”è¶…æ—¶
 	{											 
-		SDMMC1->ICR|=1<<2;				//Çå³ıÃüÁîÏìÓ¦³¬Ê±±êÖ¾
+		SDMMC1->ICR|=1<<2;				//æ¸…é™¤å‘½ä»¤å“åº”è¶…æ—¶æ ‡å¿—
 		return SD_CMD_RSP_TIMEOUT;
 	}	 
-   	SDMMC1->ICR=0X1FE00FFF;				//Çå³ı±ê¼Ç
+   	SDMMC1->ICR=0X1FE00FFF;				//æ¸…é™¤æ ‡è®°
  	return SD_OK;								  
 }
-//¼ì²éR2ÏìÓ¦µÄ´íÎó×´Ì¬
-//·µ»ØÖµ:´íÎó×´Ì¬
+//æ£€æŸ¥R2å“åº”çš„é”™è¯¯çŠ¶æ€
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€
 SD_Error CmdResp2Error(void)
 {
 	SD_Error errorstatus=SD_OK;
@@ -721,26 +721,26 @@ SD_Error CmdResp2Error(void)
  	while(timeout--)
 	{
 		status=SDMMC1->STA;
-		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRC´íÎó/ÃüÁîÏìÓ¦³¬Ê±/ÒÑ¾­ÊÕµ½ÏìÓ¦(CRCĞ£Ñé³É¹¦)	
+		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRCé”™è¯¯/å‘½ä»¤å“åº”è¶…æ—¶/å·²ç»æ”¶åˆ°å“åº”(CRCæ ¡éªŒæˆåŠŸ)	
 	}
-  	if((timeout==0)||(status&(1<<2)))	//ÏìÓ¦³¬Ê±
+  	if((timeout==0)||(status&(1<<2)))	//å“åº”è¶…æ—¶
 	{																				    
 		errorstatus=SD_CMD_RSP_TIMEOUT; 
-		SDMMC1->ICR|=1<<2;				//Çå³ıÃüÁîÏìÓ¦³¬Ê±±êÖ¾
+		SDMMC1->ICR|=1<<2;				//æ¸…é™¤å‘½ä»¤å“åº”è¶…æ—¶æ ‡å¿—
 		return errorstatus;
 	}	 
-	if(status&1<<0)						//CRC´íÎó
+	if(status&1<<0)						//CRCé”™è¯¯
 	{								   
 		errorstatus=SD_CMD_CRC_FAIL;
-		SDMMC1->ICR|=1<<0;				//Çå³ıÏìÓ¦±êÖ¾
+		SDMMC1->ICR|=1<<0;				//æ¸…é™¤å“åº”æ ‡å¿—
  	}
-	SDMMC1->ICR=0X1FE00FFF;				//Çå³ı±ê¼Ç
+	SDMMC1->ICR=0X1FE00FFF;				//æ¸…é™¤æ ‡è®°
  	return errorstatus;								    		 
 } 
-//¼ì²éR6ÏìÓ¦µÄ´íÎó×´Ì¬
-//cmd:Ö®Ç°·¢ËÍµÄÃüÁî
-//prca:¿¨·µ»ØµÄRCAµØÖ·
-//·µ»ØÖµ:´íÎó×´Ì¬
+//æ£€æŸ¥R6å“åº”çš„é”™è¯¯çŠ¶æ€
+//cmd:ä¹‹å‰å‘é€çš„å‘½ä»¤
+//prca:å¡è¿”å›çš„RCAåœ°å€
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€
 SD_Error CmdResp6Error(u8 cmd,u16*prca)
 {
 	SD_Error errorstatus=SD_OK;
@@ -749,27 +749,27 @@ SD_Error CmdResp6Error(u8 cmd,u16*prca)
  	while(1)
 	{
 		status=SDMMC1->STA;
-		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRC´íÎó/ÃüÁîÏìÓ¦³¬Ê±/ÒÑ¾­ÊÕµ½ÏìÓ¦(CRCĞ£Ñé³É¹¦)	
+		if(status&((1<<0)|(1<<2)|(1<<6)))break;//CRCé”™è¯¯/å‘½ä»¤å“åº”è¶…æ—¶/å·²ç»æ”¶åˆ°å“åº”(CRCæ ¡éªŒæˆåŠŸ)	
 	}
-	if(status&(1<<2))					//ÏìÓ¦³¬Ê±
+	if(status&(1<<2))					//å“åº”è¶…æ—¶
 	{																				    
- 		SDMMC1->ICR|=1<<2;				//Çå³ıÃüÁîÏìÓ¦³¬Ê±±êÖ¾
+ 		SDMMC1->ICR|=1<<2;				//æ¸…é™¤å‘½ä»¤å“åº”è¶…æ—¶æ ‡å¿—
 		return SD_CMD_RSP_TIMEOUT;
 	}	 	 
-	if(status&1<<0)						//CRC´íÎó
+	if(status&1<<0)						//CRCé”™è¯¯
 	{								   
-		SDMMC1->ICR|=1<<0;				//Çå³ıÏìÓ¦±êÖ¾
+		SDMMC1->ICR|=1<<0;				//æ¸…é™¤å“åº”æ ‡å¿—
  		return SD_CMD_CRC_FAIL;
 	}
-	if(SDMMC1->RESPCMD!=cmd)			//ÅĞ¶ÏÊÇ·ñÏìÓ¦cmdÃüÁî
+	if(SDMMC1->RESPCMD!=cmd)			//åˆ¤æ–­æ˜¯å¦å“åº”cmdå‘½ä»¤
 	{
  		return SD_ILLEGAL_CMD; 		
 	}	    
-	SDMMC1->ICR=0X1FE00FFF;				//Çå³ıËùÓĞ±ê¼Ç
-	rspr1=SDMMC1->RESP1;				//µÃµ½ÏìÓ¦ 	 
+	SDMMC1->ICR=0X1FE00FFF;				//æ¸…é™¤æ‰€æœ‰æ ‡è®°
+	rspr1=SDMMC1->RESP1;				//å¾—åˆ°å“åº” 	 
 	if(SD_ALLZERO==(rspr1&(SD_R6_GENERAL_UNKNOWN_ERROR|SD_R6_ILLEGAL_CMD|SD_R6_COM_CRC_FAILED)))
 	{
-		*prca=(u16)(rspr1>>16);			//ÓÒÒÆ16Î»µÃµ½,rca
+		*prca=(u16)(rspr1>>16);			//å³ç§»16ä½å¾—åˆ°,rca
 		return errorstatus;
 	}
    	if(rspr1&SD_R6_GENERAL_UNKNOWN_ERROR)return SD_GENERAL_UNKNOWN_ERROR;
@@ -778,9 +778,9 @@ SD_Error CmdResp6Error(u8 cmd,u16*prca)
 	return errorstatus;
 }
 
-//SDMMCÊ¹ÄÜ¿í×ÜÏßÄ£Ê½
-//enx:0,²»Ê¹ÄÜ;1,Ê¹ÄÜ;
-//·µ»ØÖµ:´íÎó×´Ì¬
+//SDMMCä½¿èƒ½å®½æ€»çº¿æ¨¡å¼
+//enx:0,ä¸ä½¿èƒ½;1,ä½¿èƒ½;
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€
 SD_Error SDEnWideBus(u8 enx)
 {
 	SD_Error errorstatus = SD_OK;
@@ -788,47 +788,47 @@ SD_Error SDEnWideBus(u8 enx)
 	u8 arg=0X00;
 	if(enx)arg=0X02;
 	else arg=0X00;
- 	if(SDMMC1->RESP1&SD_CARD_LOCKED)return SD_LOCK_UNLOCK_FAILED;//SD¿¨´¦ÓÚLOCKED×´Ì¬		    
- 	errorstatus=FindSCR(RCA,scr);						//µÃµ½SCR¼Ä´æÆ÷Êı¾İ
+ 	if(SDMMC1->RESP1&SD_CARD_LOCKED)return SD_LOCK_UNLOCK_FAILED;//SDå¡å¤„äºLOCKEDçŠ¶æ€		    
+ 	errorstatus=FindSCR(RCA,scr);						//å¾—åˆ°SCRå¯„å­˜å™¨æ•°æ®
  	if(errorstatus!=SD_OK)return errorstatus;
-	if((scr[1]&SD_WIDE_BUS_SUPPORT)!=SD_ALLZERO)		//Ö§³Ö¿í×ÜÏß
+	if((scr[1]&SD_WIDE_BUS_SUPPORT)!=SD_ALLZERO)		//æ”¯æŒå®½æ€»çº¿
 	{
-	 	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)RCA<<16);	//·¢ËÍCMD55+RCA,¶ÌÏìÓ¦											  
+	 	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)RCA<<16);	//å‘é€CMD55+RCA,çŸ­å“åº”											  
 	 	errorstatus=CmdResp1Error(SD_CMD_APP_CMD);
 	 	if(errorstatus!=SD_OK)return errorstatus; 
-	 	SDMMC_Send_Cmd(SD_CMD_APP_SD_SET_BUSWIDTH,1,arg);//·¢ËÍACMD6,¶ÌÏìÓ¦,²ÎÊı:10,4Î»;00,1Î».											  
+	 	SDMMC_Send_Cmd(SD_CMD_APP_SD_SET_BUSWIDTH,1,arg);//å‘é€ACMD6,çŸ­å“åº”,å‚æ•°:10,4ä½;00,1ä½.											  
 		errorstatus=CmdResp1Error(SD_CMD_APP_SD_SET_BUSWIDTH);
 		return errorstatus;
-	}else return SD_REQUEST_NOT_APPLICABLE;				//²»Ö§³Ö¿í×ÜÏßÉèÖÃ 	 
+	}else return SD_REQUEST_NOT_APPLICABLE;				//ä¸æ”¯æŒå®½æ€»çº¿è®¾ç½® 	 
 }												   
-//¼ì²é¿¨ÊÇ·ñÕıÔÚÖ´ĞĞĞ´²Ù×÷
-//pstatus:µ±Ç°×´Ì¬.
-//·µ»ØÖµ:´íÎó´úÂë
+//æ£€æŸ¥å¡æ˜¯å¦æ­£åœ¨æ‰§è¡Œå†™æ“ä½œ
+//pstatus:å½“å‰çŠ¶æ€.
+//è¿”å›å€¼:é”™è¯¯ä»£ç 
 SD_Error IsCardProgramming(u8 *pstatus)
 {
  	vu32 respR1 = 0, status = 0; 
-  	SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);		//·¢ËÍCMD13 	   
+  	SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,(u32)RCA<<16);		//å‘é€CMD13 	   
   	status=SDMMC1->STA;
-	while(!(status&((1<<0)|(1<<6)|(1<<2))))status=SDMMC1->STA;//µÈ´ı²Ù×÷Íê³É
-   	if(status&(1<<0))			//CRC¼ì²âÊ§°Ü
+	while(!(status&((1<<0)|(1<<6)|(1<<2))))status=SDMMC1->STA;//ç­‰å¾…æ“ä½œå®Œæˆ
+   	if(status&(1<<0))			//CRCæ£€æµ‹å¤±è´¥
 	{
-		SDMMC1->ICR|=1<<0;		//Çå³ı´íÎó±ê¼Ç
+		SDMMC1->ICR|=1<<0;		//æ¸…é™¤é”™è¯¯æ ‡è®°
 		return SD_CMD_CRC_FAIL;
 	}
-   	if(status&(1<<2))			//ÃüÁî³¬Ê± 
+   	if(status&(1<<2))			//å‘½ä»¤è¶…æ—¶ 
 	{
-		SDMMC1->ICR|=1<<2;		//Çå³ı´íÎó±ê¼Ç
+		SDMMC1->ICR|=1<<2;		//æ¸…é™¤é”™è¯¯æ ‡è®°
 		return SD_CMD_RSP_TIMEOUT;
 	}
  	if(SDMMC1->RESPCMD!=SD_CMD_SEND_STATUS)return SD_ILLEGAL_CMD;
-	SDMMC1->ICR=0X1FE00FFF;		//Çå³ıËùÓĞ±ê¼Ç
+	SDMMC1->ICR=0X1FE00FFF;		//æ¸…é™¤æ‰€æœ‰æ ‡è®°
 	respR1=SDMMC1->RESP1;
 	*pstatus=(u8)((respR1>>9)&0x0000000F);
 	return SD_OK;
 }
-//¶ÁÈ¡µ±Ç°¿¨×´Ì¬
-//pcardstatus:¿¨×´Ì¬
-//·µ»ØÖµ:´íÎó´úÂë
+//è¯»å–å½“å‰å¡çŠ¶æ€
+//pcardstatus:å¡çŠ¶æ€
+//è¿”å›å€¼:é”™è¯¯ä»£ç 
 SD_Error SD_SendStatus(uint32_t *pcardstatus)
 {
 	SD_Error errorstatus = SD_OK;
@@ -837,71 +837,71 @@ SD_Error SD_SendStatus(uint32_t *pcardstatus)
 		errorstatus=SD_INVALID_PARAMETER;
 		return errorstatus;
 	}
- 	SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,RCA<<16);	//·¢ËÍCMD13,¶ÌÏìÓ¦		 
-	errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);	//²éÑ¯ÏìÓ¦×´Ì¬ 
+ 	SDMMC_Send_Cmd(SD_CMD_SEND_STATUS,1,RCA<<16);	//å‘é€CMD13,çŸ­å“åº”		 
+	errorstatus=CmdResp1Error(SD_CMD_SEND_STATUS);	//æŸ¥è¯¢å“åº”çŠ¶æ€ 
 	if(errorstatus!=SD_OK)return errorstatus;
-	*pcardstatus=SDMMC1->RESP1;//¶ÁÈ¡ÏìÓ¦Öµ
+	*pcardstatus=SDMMC1->RESP1;//è¯»å–å“åº”å€¼
 	return errorstatus;
 } 
-//·µ»ØSD¿¨µÄ×´Ì¬
-//·µ»ØÖµ:SD¿¨×´Ì¬
+//è¿”å›SDå¡çš„çŠ¶æ€
+//è¿”å›å€¼:SDå¡çŠ¶æ€
 SDCardState SD_GetState(void)
 {
 	u32 resp1=0;
 	if(SD_SendStatus(&resp1)!=SD_OK)return SD_CARD_ERROR;
 	else return (SDCardState)((resp1>>9) & 0x0F);
 }
-//²éÕÒSD¿¨µÄSCR¼Ä´æÆ÷Öµ
-//rca:¿¨Ïà¶ÔµØÖ·
-//pscr:Êı¾İ»º´æÇø(´æ´¢SCRÄÚÈİ)
-//·µ»ØÖµ:´íÎó×´Ì¬		   
+//æŸ¥æ‰¾SDå¡çš„SCRå¯„å­˜å™¨å€¼
+//rca:å¡ç›¸å¯¹åœ°å€
+//pscr:æ•°æ®ç¼“å­˜åŒº(å­˜å‚¨SCRå†…å®¹)
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€		   
 SD_Error FindSCR(u16 rca,u32 *pscr)
 {  
 	SD_Error errorstatus = SD_OK;
 	u32 tempscr[2]={0,0};  
- 	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,8);			//·¢ËÍCMD16,¶ÌÏìÓ¦,ÉèÖÃBlock SizeÎª8×Ö½Ú											  
+ 	SDMMC_Send_Cmd(SD_CMD_SET_BLOCKLEN,1,8);			//å‘é€CMD16,çŸ­å“åº”,è®¾ç½®Block Sizeä¸º8å­—èŠ‚											  
  	errorstatus=CmdResp1Error(SD_CMD_SET_BLOCKLEN);
  	if(errorstatus!=SD_OK)return errorstatus;	    
-  	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)rca<<16);	//·¢ËÍCMD55,¶ÌÏìÓ¦ 									  
+  	SDMMC_Send_Cmd(SD_CMD_APP_CMD,1,(u32)rca<<16);	//å‘é€CMD55,çŸ­å“åº” 									  
  	errorstatus=CmdResp1Error(SD_CMD_APP_CMD);
  	if(errorstatus!=SD_OK)return errorstatus;
-	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,8,3,1);		//8¸ö×Ö½Ú³¤¶È,blockÎª8×Ö½Ú,SD¿¨µ½SDMMC.
-   	SDMMC_Send_Cmd(SD_CMD_SD_APP_SEND_SCR,1,0);		//·¢ËÍACMD51,¶ÌÏìÓ¦,²ÎÊıÎª0											  
+	SDMMC_Send_Data_Cfg(SD_DATATIMEOUT,8,3,1);		//8ä¸ªå­—èŠ‚é•¿åº¦,blockä¸º8å­—èŠ‚,SDå¡åˆ°SDMMC.
+   	SDMMC_Send_Cmd(SD_CMD_SD_APP_SEND_SCR,1,0);		//å‘é€ACMD51,çŸ­å“åº”,å‚æ•°ä¸º0											  
  	errorstatus=CmdResp1Error(SD_CMD_SD_APP_SEND_SCR);
  	if(errorstatus!=SD_OK)return errorstatus;							   
  	while(!(SDMMC1->STA&(SDMMC_STA_RXOVERR|SDMMC_STA_DCRCFAIL|SDMMC_STA_DTIMEOUT|SDMMC_STA_DBCKEND|SDMMC_STA_DATAEND)))
 	{ 
-		if(!(SDMMC1->STA&(1<<19)))		//½ÓÊÕFIFOÊı¾İ¿ÉÓÃ
+		if(!(SDMMC1->STA&(1<<19)))		//æ¥æ”¶FIFOæ•°æ®å¯ç”¨
 		{
-			tempscr[0]=SDMMC1->FIFO;	//¶ÁÈ¡FIFOÄÚÈİ 
-			tempscr[1]=SDMMC1->FIFO;	//¶ÁÈ¡FIFOÄÚÈİ 
+			tempscr[0]=SDMMC1->FIFO;	//è¯»å–FIFOå†…å®¹ 
+			tempscr[1]=SDMMC1->FIFO;	//è¯»å–FIFOå†…å®¹ 
 			break;
 		}
 	}
- 	if(SDMMC1->STA&(1<<3))		//½ÓÊÕÊı¾İ³¬Ê±
+ 	if(SDMMC1->STA&(1<<3))		//æ¥æ”¶æ•°æ®è¶…æ—¶
 	{										 
- 		SDMMC1->ICR|=1<<3;		//Çå³ı±ê¼Ç
+ 		SDMMC1->ICR|=1<<3;		//æ¸…é™¤æ ‡è®°
 		return SD_DATA_TIMEOUT;
-	}else if(SDMMC1->STA&(1<<1))//ÒÑ·¢ËÍ/½ÓÊÕµÄÊı¾İ¿éCRCĞ£Ñé´íÎó
+	}else if(SDMMC1->STA&(1<<1))//å·²å‘é€/æ¥æ”¶çš„æ•°æ®å—CRCæ ¡éªŒé”™è¯¯
 	{
- 		SDMMC1->ICR|=1<<1;		//Çå³ı±ê¼Ç
+ 		SDMMC1->ICR|=1<<1;		//æ¸…é™¤æ ‡è®°
 		return SD_DATA_CRC_FAIL;   
-	}else if(SDMMC1->STA&(1<<5))//½ÓÊÕFIFOÒç³ö
+	}else if(SDMMC1->STA&(1<<5))//æ¥æ”¶FIFOæº¢å‡º
 	{
- 		SDMMC1->ICR|=1<<5;		//Çå³ı±ê¼Ç
+ 		SDMMC1->ICR|=1<<5;		//æ¸…é™¤æ ‡è®°
 		return SD_RX_OVERRUN;   	   
 	} 
-   	SDMMC1->ICR=0X1FE00FFF;		//Çå³ı±ê¼Ç	 
-	//°ÑÊı¾İË³Ğò°´8Î»Îªµ¥Î»µ¹¹ıÀ´.   	
+   	SDMMC1->ICR=0X1FE00FFF;		//æ¸…é™¤æ ‡è®°	 
+	//æŠŠæ•°æ®é¡ºåºæŒ‰8ä½ä¸ºå•ä½å€’è¿‡æ¥.   	
 	*(pscr+1)=((tempscr[0]&SD_0TO7BITS)<<24)|((tempscr[0]&SD_8TO15BITS)<<8)|((tempscr[0]&SD_16TO23BITS)>>8)|((tempscr[0]&SD_24TO31BITS)>>24);
 	*(pscr)=((tempscr[1]&SD_0TO7BITS)<<24)|((tempscr[1]&SD_8TO15BITS)<<8)|((tempscr[1]&SD_16TO23BITS)>>8)|((tempscr[1]&SD_24TO31BITS)>>24);
  	return errorstatus;
 }  
-//¶ÁSD¿¨
-//buf:¶ÁÊı¾İ»º´æÇø
-//sector:ÉÈÇøµØÖ·
-//cnt:ÉÈÇø¸öÊı	
-//·µ»ØÖµ:´íÎó×´Ì¬;0,Õı³£;ÆäËû,´íÎó´úÂë;				  				 
+//è¯»SDå¡
+//buf:è¯»æ•°æ®ç¼“å­˜åŒº
+//sector:æ‰‡åŒºåœ°å€
+//cnt:æ‰‡åŒºä¸ªæ•°	
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€;0,æ­£å¸¸;å…¶ä»–,é”™è¯¯ä»£ç ;				  				 
 u8 SD_ReadDisk(u8*buf,u32 sector,u32 cnt)
 {
 	u8 sta=SD_OK;
@@ -912,18 +912,18 @@ u8 SD_ReadDisk(u8*buf,u32 sector,u32 cnt)
 	{
 	 	for(n=0;n<cnt;n++)
 		{
-		 	sta=SD_ReadBlocks(SDMMC_DATA_BUFFER,lsector+512*n,512,1);//µ¥¸ösectorµÄ¶Á²Ù×÷
+		 	sta=SD_ReadBlocks(SDMMC_DATA_BUFFER,lsector+512*n,512,1);//å•ä¸ªsectorçš„è¯»æ“ä½œ
 			memcpy(buf,SDMMC_DATA_BUFFER,512);
 			buf+=512;
 		} 
-	}else sta=SD_ReadBlocks(buf,lsector,512,cnt);	//µ¥¸ö/¶à¸ösector   
+	}else sta=SD_ReadBlocks(buf,lsector,512,cnt);	//å•ä¸ª/å¤šä¸ªsector   
 	return sta;
 }
-//Ğ´SD¿¨
-//buf:Ğ´Êı¾İ»º´æÇø
-//sector:ÉÈÇøµØÖ·
-//cnt:ÉÈÇø¸öÊı	
-//·µ»ØÖµ:´íÎó×´Ì¬;0,Õı³£;ÆäËû,´íÎó´úÂë;	
+//å†™SDå¡
+//buf:å†™æ•°æ®ç¼“å­˜åŒº
+//sector:æ‰‡åŒºåœ°å€
+//cnt:æ‰‡åŒºä¸ªæ•°	
+//è¿”å›å€¼:é”™è¯¯çŠ¶æ€;0,æ­£å¸¸;å…¶ä»–,é”™è¯¯ä»£ç ;	
 u8 SD_WriteDisk(u8*buf,u32 sector,u32 cnt)
 {
 	u8 sta=SD_OK;
@@ -935,10 +935,10 @@ u8 SD_WriteDisk(u8*buf,u32 sector,u32 cnt)
 	 	for(n=0;n<cnt;n++)
 		{
 			memcpy(SDMMC_DATA_BUFFER,buf,512);
-		 	sta=SD_WriteBlocks(SDMMC_DATA_BUFFER,lsector+512*n,512,1);//µ¥¸ösectorµÄĞ´²Ù×÷
+		 	sta=SD_WriteBlocks(SDMMC_DATA_BUFFER,lsector+512*n,512,1);//å•ä¸ªsectorçš„å†™æ“ä½œ
 			buf+=512;
 		} 
-	}else sta=SD_WriteBlocks(buf,lsector,512,cnt);	//µ¥¸ö/¶à¸ösector   
+	}else sta=SD_WriteBlocks(buf,lsector,512,cnt);	//å•ä¸ª/å¤šä¸ªsector   
 	return sta;
 }
 

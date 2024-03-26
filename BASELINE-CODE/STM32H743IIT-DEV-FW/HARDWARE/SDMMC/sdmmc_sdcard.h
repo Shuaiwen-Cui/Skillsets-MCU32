@@ -2,32 +2,32 @@
 #define __SDMMC_SDCARD_H																			   
 #include "sys.h" 													   
 //////////////////////////////////////////////////////////////////////////////////	 
-//±¾³ÌÐòÖ»¹©Ñ§Ï°Ê¹ÓÃ£¬Î´¾­×÷ÕßÐí¿É£¬²»µÃÓÃÓÚÆäËüÈÎºÎÓÃÍ¾
-//ALIENTEK STM32H7¿ª·¢°å
-//SDMMC Çý¶¯´úÂë	(½öÌá¹©²éÑ¯Ä£Ê½Çý¶¯´úÂë)
-//ÕýµãÔ­×Ó@ALIENTEK
-//¼¼ÊõÂÛÌ³:www.openedv.com
-//´´½¨ÈÕÆÚ:2018/7/31
-//°æ±¾£ºV1.0
-//°æÈ¨ËùÓÐ£¬µÁ°æ±Ø¾¿¡£
-//Copyright(C) ¹ãÖÝÊÐÐÇÒíµç×Ó¿Æ¼¼ÓÐÏÞ¹«Ë¾ 2014-2024
+//æœ¬ç¨‹åºåªä¾›å­¦ä¹ ä½¿ç”¨ï¼Œæœªç»ä½œè€…è®¸å¯ï¼Œä¸å¾—ç”¨äºŽå…¶å®ƒä»»ä½•ç”¨é€”
+//ALIENTEK STM32H7å¼€å‘æ¿
+//SDMMC é©±åŠ¨ä»£ç 	(ä»…æä¾›æŸ¥è¯¢æ¨¡å¼é©±åŠ¨ä»£ç )
+//æ­£ç‚¹åŽŸå­@ALIENTEK
+//æŠ€æœ¯è®ºå›:www.openedv.com
+//åˆ›å»ºæ—¥æœŸ:2018/7/31
+//ç‰ˆæœ¬ï¼šV1.0
+//ç‰ˆæƒæ‰€æœ‰ï¼Œç›—ç‰ˆå¿…ç©¶ã€‚
+//Copyright(C) å¹¿å·žå¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸ 2014-2024
 //All rights reserved		 
 //********************************************************************************
-//Éý¼¶ËµÃ÷
-//ÎÞ
+//å‡çº§è¯´æ˜Ž
+//æ— 
 ////////////////////////////////////////////////////////////////////////////////// 	 
  
  
-//ÓÃ»§ÅäÖÃÇø			  
-//SDMMCÊ±ÖÓ¼ÆËã¹«Ê½:SDMMC_CKÊ±ÖÓ=sdmmc_ker_ck/[2*clkdiv];ÆäÖÐ,sdmmc_ker_ckÀ´×Ôpll1_q_ck,Îª200Mhz
-//Èç¹û³öÏÖÇý¶¯´íÎó,Çë³¢ÊÔ½«SDMMC_TRANSFER_CLK_DIVÆµÂÊ½µµÍ
-//#define SDMMC_INIT_CLK_DIV        0xFA		//SDMMC³õÊ¼»¯ÆµÂÊ£¬200M/(250*2)=400Khz,×î´ó400Kh  
-#define SDMMC_TRANSFER_CLK_DIV    0x04		//SDMMC´«ÊäÆµÂÊ,¸ÃÖµÌ«Ð¡¿ÉÄÜ»áµ¼ÖÂ¶ÁÐ´ÎÄ¼þ³ö´í 
+//ç”¨æˆ·é…ç½®åŒº			  
+//SDMMCæ—¶é’Ÿè®¡ç®—å…¬å¼:SDMMC_CKæ—¶é’Ÿ=sdmmc_ker_ck/[2*clkdiv];å…¶ä¸­,sdmmc_ker_ckæ¥è‡ªpll1_q_ck,ä¸º200Mhz
+//å¦‚æžœå‡ºçŽ°é©±åŠ¨é”™è¯¯,è¯·å°è¯•å°†SDMMC_TRANSFER_CLK_DIVé¢‘çŽ‡é™ä½Ž
+//#define SDMMC_INIT_CLK_DIV        0xFA		//SDMMCåˆå§‹åŒ–é¢‘çŽ‡ï¼Œ200M/(250*2)=400Khz,æœ€å¤§400Kh  
+#define SDMMC_TRANSFER_CLK_DIV    0x04		//SDMMCä¼ è¾“é¢‘çŽ‡,è¯¥å€¼å¤ªå°å¯èƒ½ä¼šå¯¼è‡´è¯»å†™æ–‡ä»¶å‡ºé”™ 
 										 
-//SD¿¨²Ù×÷ ¸÷ÖÖ´íÎóÃ¶¾Ù¶¨Òå
+//SDå¡æ“ä½œ å„ç§é”™è¯¯æžšä¸¾å®šä¹‰
 typedef enum
 {	 
-	//ÌØÊâ´íÎó¶¨Òå 
+	//ç‰¹æ®Šé”™è¯¯å®šä¹‰ 
 	SD_CMD_CRC_FAIL                    = (1),   /*!< Command response received (but CRC check failed)              */
 	SD_DATA_CRC_FAIL                   = (2),   /*!< Data block sent/received (CRC check failed)                   */
 	SD_CMD_RSP_TIMEOUT                 = (3),   /*!< Command response timeout                                      */
@@ -61,7 +61,7 @@ typedef enum
 	SD_SDMMC_FUNCTION_BUSY             = (31),
 	SD_SDMMC_FUNCTION_FAILED           = (32),
 	SD_SDMMC_UNKNOWN_FUNCTION          = (33),
-	//±ê×¼´íÎó¶¨Òå
+	//æ ‡å‡†é”™è¯¯å®šä¹‰
 	SD_INTERNAL_ERROR                  = (34),
 	SD_NOT_CONFIGURED                  = (35),
 	SD_REQUEST_PENDING                 = (36),
@@ -73,7 +73,7 @@ typedef enum
 	SD_OK                              = (0) 
 } SD_Error;		  
 
-//SD¿¨CSD¼Ä´æÆ÷Êý¾Ý		  
+//SDå¡CSDå¯„å­˜å™¨æ•°æ®		  
 typedef struct
 {
 	u8  CSDStruct;            /*!< CSD structure */
@@ -115,7 +115,7 @@ typedef struct
 	u8  Reserved4;            /*!< always 1*/
 } SD_CSD;   
 
-//SD¿¨CID¼Ä´æÆ÷Êý¾Ý
+//SDå¡CIDå¯„å­˜å™¨æ•°æ®
 typedef struct
 {
 	u8  ManufacturerID;       /*!< ManufacturerID */
@@ -129,7 +129,7 @@ typedef struct
 	u8  CID_CRC;              /*!< CID CRC */
 	u8  Reserved2;            /*!< always 1 */
 } SD_CID;	 
-//SD¿¨×´Ì¬
+//SDå¡çŠ¶æ€
 typedef enum
 {
 	SD_CARD_READY                  = ((uint32_t)0x00000001),
@@ -143,20 +143,20 @@ typedef enum
 	SD_CARD_ERROR                  = ((uint32_t)0x000000FF)
 }SDCardState;
 
-//SD¿¨ÐÅÏ¢,°üÀ¨CSD,CIDµÈÊý¾Ý
+//SDå¡ä¿¡æ¯,åŒ…æ‹¬CSD,CIDç­‰æ•°æ®
 typedef struct
 {
   SD_CSD SD_csd;
   SD_CID SD_cid;
-  long long CardCapacity;  	//SD¿¨ÈÝÁ¿,µ¥Î»:×Ö½Ú,×î´óÖ§³Ö2^64×Ö½Ú´óÐ¡µÄ¿¨.
-  u32 CardBlockSize; 		//SD¿¨¿é´óÐ¡	
-  u16 RCA;					//¿¨Ïà¶ÔµØÖ·
-  u8 CardType;				//¿¨ÀàÐÍ
+  long long CardCapacity;  	//SDå¡å®¹é‡,å•ä½:å­—èŠ‚,æœ€å¤§æ”¯æŒ2^64å­—èŠ‚å¤§å°çš„å¡.
+  u32 CardBlockSize; 		//SDå¡å—å¤§å°	
+  u16 RCA;					//å¡ç›¸å¯¹åœ°å€
+  u8 CardType;				//å¡ç±»åž‹
 } SD_CardInfo;
-extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢			 
+extern SD_CardInfo SDCardInfo;//SDå¡ä¿¡æ¯			 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//SDMMC¿¨ Ö¸Áî¼¯
-//¿½±´×Ô:stm32f7xx_hal_sd.h
+//SDMMCå¡ æŒ‡ä»¤é›†
+//æ‹·è´è‡ª:stm32f7xx_hal_sd.h
 #define SD_CMD_GO_IDLE_STATE                       ((uint8_t)0U)   /*!< Resets the SD memory card.                                                               */
 #define SD_CMD_SEND_OP_COND                        ((uint8_t)1U)   /*!< Sends host capacity support information and activates the card's initialization process. */
 #define SD_CMD_ALL_SEND_CID                        ((uint8_t)2U)   /*!< Asks any card connected to the host to send the CID numbers on the CMD line.             */
@@ -242,11 +242,11 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SD_CMD_SD_APP_CHANGE_SECURE_AREA           ((uint8_t)49U)  /*!< For SD card only */
 #define SD_CMD_SD_APP_SECURE_WRITE_MKB             ((uint8_t)48U)  /*!< For SD card only */
 
-//CMD8Ö¸Áî
+//CMD8æŒ‡ä»¤
 #define SD_SDMMC_SEND_IF_COND           	  ((uint32_t)SD_CMD_HS_SEND_EXT_CSD)
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-//Ö§³ÖµÄSD¿¨¶¨Òå
+//æ”¯æŒçš„SDå¡å®šä¹‰
 #define STD_CAPACITY_SD_CARD_V1_1		((uint32_t)0x00000000U)
 #define STD_CAPACITY_SD_CARD_V2_0		((uint32_t)0x00000001U)
 #define HIGH_CAPACITY_SD_CARD			((uint32_t)0x00000002U)
@@ -256,7 +256,7 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SECURE_DIGITAL_IO_COMBO_CARD	((uint32_t)0x00000006U)
 #define HIGH_CAPACITY_MMC_CARD			((uint32_t)0x00000007U)
 
-//SDMMCÏà¹Ø²ÎÊý¶¨Òå
+//SDMMCç›¸å…³å‚æ•°å®šä¹‰
 #define NULL 0
 //#define SDMMC_STATIC_FLAGS				((u32)0x000205FF)
 #define SDMMC_CMD0TIMEOUT				((u32)0x00010000)	  
@@ -319,7 +319,7 @@ extern SD_CardInfo SDCardInfo;//SD¿¨ÐÅÏ¢
 #define SD_CCCC_ERASE                   ((u32)0x00000020)
 																 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
-//Ïà¹Øº¯Êý¶¨Òå
+//ç›¸å…³å‡½æ•°å®šä¹‰
 SD_Error SD_Init(void);
 void SDMMC_Clock_Set(u16 clkdiv);
 void SDMMC_Send_Cmd(u8 cmdindex,u8 waitrsp,u32 arg);
@@ -344,8 +344,8 @@ SD_Error SDEnWideBus(u8 enx);
 SD_Error IsCardProgramming(u8 *pstatus); 
 SD_Error FindSCR(u16 rca,u32 *pscr);   
 
-u8 SD_ReadDisk(u8*buf,u32 sector,u32 cnt); 	//¶ÁSD¿¨,fatfs/usbµ÷ÓÃ
-u8 SD_WriteDisk(u8*buf,u32 sector,u32 cnt);	//Ð´SD¿¨,fatfs/usbµ÷ÓÃ
+u8 SD_ReadDisk(u8*buf,u32 sector,u32 cnt); 	//è¯»SDå¡,fatfs/usbè°ƒç”¨
+u8 SD_WriteDisk(u8*buf,u32 sector,u32 cnt);	//å†™SDå¡,fatfs/usbè°ƒç”¨
 
 
 #endif 

@@ -28,13 +28,14 @@
 #include "ff.h"
 #include "exfuns.h"
 #include "disp_est.h"
+#include "global_statement.h"
 /*----------------------------------<DEPENDENCIES>---------------------------------*/
 
 /*----------------------------------[STATEMENTS]-----------------------------------*/
 #define FFT_LENGTH		1024 		//FFT LENGTH BY DEFAULT 1024
 
-float fft_inputbuf[FFT_LENGTH*2];	//FFT INPUT 
-float fft_outputbuf[FFT_LENGTH];	//FFT OUTPUT
+// float fft_inputbuf[FFT_LENGTH*2];	//FFT INPUT 
+// float fft_outputbuf[FFT_LENGTH];	//FFT OUTPUT
 
 u8 timeout;
 
@@ -146,33 +147,37 @@ int main(void)
 
 	printf("\r\nSD Card Fatfs OK!\r\n");
 
- 	POINT_COLOR=BLUE;		//set the font color to blue  
-	arm_cfft_radix4_init_f32(&scfft,FFT_LENGTH,0,1);// init the FFT structure
+	// wait for key press
 
 
+	// delay
+	delay_ms(3000);
+	// main logic
+	disp_est();
 /*----------------------------------<APPLICATION SETUP>-----------------------------*/
 
 /*-----------------------------------[APPLICATION LOOP]-----------------------------*/		
-	while(1)
-	{
-		key = KEY_Scan(0);
-		if (key == KEY0_PRES)
-		{
-			delay_ms(1000);
-			printf("DISP EST TEST BUSY.\r\n");
-		}
-		else
-		{
-			delay_ms(1000);
-			printf("DISP EST TEST IDLE.\r\n");
-			disp_est();
-		}
-		t++;
-		// printf("t:%d\r\n",t);
-		if((t%2)==0)LED0_Toggle;
-	}
+	// while(1)
+	// {
+	// 	key = KEY_Scan(0);
+	// 	if (key == KEY0_PRES)
+	// 	{
+	// 		delay_ms(1000);
+	// 		printf("DISP EST TEST BUSY.\r\n");
+	// 	}
+	// 	else
+	// 	{
+	// 		delay_ms(1000);
+	// 		printf("DISP EST TEST IDLE.\r\n");
+			
+	// 	}
+	// 	t++;
+	// 	// printf("t:%d\r\n",t);
+	// 	if((t%2)==0)LED0_Toggle;
+	// }
 
 /*-----------------------------------<APPLICATION LOOP>-----------------------------*/
 
+	printf("DISP EST FINISHED.\r\n");
 }
 

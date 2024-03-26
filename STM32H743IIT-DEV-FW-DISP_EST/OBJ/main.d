@@ -120,3 +120,4 @@
 ..\obj\main.o: ..\FATFS\source\ffconf.h
 ..\obj\main.o: ..\FATFS\exfuns\exfuns.h
 ..\obj\main.o: ..\APP\disp_est.h
+..\obj\main.o: ..\APP\global_statement.h

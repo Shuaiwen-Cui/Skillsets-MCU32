@@ -119,3 +119,4 @@
 ..\obj\disp_est.o: ..\FATFS\source\integer.h
 ..\obj\disp_est.o: ..\FATFS\source\ffconf.h
 ..\obj\disp_est.o: ..\FATFS\exfuns\exfuns.h
+..\obj\disp_est.o: ..\APP\global_statement.h

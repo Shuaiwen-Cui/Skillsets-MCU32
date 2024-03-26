@@ -15,19 +15,19 @@
 #include "timer.h"
 #include "arm_math.h"
 /************************************************
- ALIENTEK °¢²¨ÂŞSTM32H7¿ª·¢°å ÊµÑé52_2
- DSP FFTÊµÑé-HAL¿âº¯Êı°æ
- ¼¼ÊõÖ§³Ö£ºwww.openedv.com
- ÌÔ±¦µêÆÌ£ºhttp://eboard.taobao.com 
- ¹Ø×¢Î¢ĞÅ¹«ÖÚÆ½Ì¨Î¢ĞÅºÅ£º"ÕıµãÔ­×Ó"£¬Ãâ·Ñ»ñÈ¡STM32×ÊÁÏ¡£
- ¹ãÖİÊĞĞÇÒíµç×Ó¿Æ¼¼ÓĞÏŞ¹«Ë¾  
- ×÷Õß£ºÕıµãÔ­×Ó @ALIENTEK
+ ALIENTEK é˜¿æ³¢ç½—STM32H7å¼€å‘æ¿ å®éªŒ52_2
+ DSP FFTå®éªŒ-HALåº“å‡½æ•°ç‰ˆ
+ æŠ€æœ¯æ”¯æŒï¼šwww.openedv.com
+ æ·˜å®åº—é“ºï¼šhttp://eboard.taobao.com 
+ å…³æ³¨å¾®ä¿¡å…¬ä¼—å¹³å°å¾®ä¿¡å·ï¼š"æ­£ç‚¹åŸå­"ï¼Œå…è´¹è·å–STM32èµ„æ–™ã€‚
+ å¹¿å·å¸‚æ˜Ÿç¿¼ç”µå­ç§‘æŠ€æœ‰é™å…¬å¸  
+ ä½œè€…ï¼šæ­£ç‚¹åŸå­ @ALIENTEK
 ************************************************/
 
-#define FFT_LENGTH		1024 		//FFT³¤¶È£¬Ä¬ÈÏÊÇ1024µãFFT
+#define FFT_LENGTH		1024 		//FFTé•¿åº¦ï¼Œé»˜è®¤æ˜¯1024ç‚¹FFT
 
-float fft_inputbuf[FFT_LENGTH*2];	//FFTÊäÈëÊı×é
-float fft_outputbuf[FFT_LENGTH];	//FFTÊä³öÊı×é
+float fft_inputbuf[FFT_LENGTH*2];	//FFTè¾“å…¥æ•°ç»„
+float fft_outputbuf[FFT_LENGTH];	//FFTè¾“å‡ºæ•°ç»„
 
 u8 timeout;
 
@@ -40,47 +40,47 @@ int main(void)
 	u16 i; 
     arm_cfft_radix4_instance_f32 scfft;
 	
-	Cache_Enable();                			//´ò¿ªL1-Cache
-	MPU_Memory_Protection();        		//±£»¤Ïà¹Ø´æ´¢ÇøÓò
-	HAL_Init();				        		//³õÊ¼»¯HAL¿â
-	Stm32_Clock_Init(160,5,2,4);  		    //ÉèÖÃÊ±ÖÓ,400Mhz 
-	delay_init(400);						//ÑÓÊ±³õÊ¼»¯
-	uart_init(115200);						//´®¿Ú³õÊ¼»¯
-	usmart_dev.init(200); 		    		//³õÊ¼»¯USMART	
-	LED_Init();								//³õÊ¼»¯LED
-	KEY_Init();								//³õÊ¼»¯°´¼ü
-	SDRAM_Init();                   		//³õÊ¼»¯SDRAM
-	LCD_Init();								//³õÊ¼»¯LCD
-    TIM3_Init(65535,200-1);        //1Mhz¼ÆÊıÆµÂÊ,×î´ó¼ÆÊ±6.5Ãë³¬³ö
+	Cache_Enable();                			//æ‰“å¼€L1-Cache
+	MPU_Memory_Protection();        		//ä¿æŠ¤ç›¸å…³å­˜å‚¨åŒºåŸŸ
+	HAL_Init();				        		//åˆå§‹åŒ–HALåº“
+	Stm32_Clock_Init(160,5,2,4);  		    //è®¾ç½®æ—¶é’Ÿ,400Mhz 
+	delay_init(400);						//å»¶æ—¶åˆå§‹åŒ–
+	uart_init(115200);						//ä¸²å£åˆå§‹åŒ–
+	usmart_dev.init(200); 		    		//åˆå§‹åŒ–USMART	
+	LED_Init();								//åˆå§‹åŒ–LED
+	KEY_Init();								//åˆå§‹åŒ–æŒ‰é”®
+	SDRAM_Init();                   		//åˆå§‹åŒ–SDRAM
+	LCD_Init();								//åˆå§‹åŒ–LCD
+    TIM3_Init(65535,200-1);        //1Mhzè®¡æ•°é¢‘ç‡,æœ€å¤§è®¡æ—¶6.5ç§’è¶…å‡º
 	POINT_COLOR=RED; 
 	LCD_ShowString(30,50,200,16,16,"Apollo STM32H7");	
 	LCD_ShowString(30,70,200,16,16,"DSP FFT TEST");	
 	LCD_ShowString(30,90,200,16,16,"ATOM@ALIENTEK");
 	LCD_ShowString(30,110,200,16,16,"2018/6/14");	
-	LCD_ShowString(30,130,200,16,16,"KEY0:Run FFT");//ÏÔÊ¾ÌáÊ¾ĞÅÏ¢ 
-	LCD_ShowString(30,160,200,16,16,"FFT runtime:");//ÏÔÊ¾FFTÖ´ĞĞÊ±¼ä
- 	POINT_COLOR=BLUE;		//ÉèÖÃ×ÖÌåÎªÀ¶É«   
-	arm_cfft_radix4_init_f32(&scfft,FFT_LENGTH,0,1);//³õÊ¼»¯scfft½á¹¹Ìå£¬Éè¶¨FFTÏà¹Ø²ÎÊı
+	LCD_ShowString(30,130,200,16,16,"KEY0:Run FFT");//æ˜¾ç¤ºæç¤ºä¿¡æ¯ 
+	LCD_ShowString(30,160,200,16,16,"FFT runtime:");//æ˜¾ç¤ºFFTæ‰§è¡Œæ—¶é—´
+ 	POINT_COLOR=BLUE;		//è®¾ç½®å­—ä½“ä¸ºè“è‰²   
+	arm_cfft_radix4_init_f32(&scfft,FFT_LENGTH,0,1);//åˆå§‹åŒ–scfftç»“æ„ä½“ï¼Œè®¾å®šFFTç›¸å…³å‚æ•°
     while(1)
 	{
 		key=KEY_Scan(0);
 		if(key==KEY0_PRES)
 		{
-			for(i=0;i<FFT_LENGTH;i++)//Éú³ÉĞÅºÅĞòÁĞ
+			for(i=0;i<FFT_LENGTH;i++)//ç”Ÿæˆä¿¡å·åºåˆ—
 			{
 				 fft_inputbuf[2*i]=100+
 				                   10*arm_sin_f32(2*PI*i/FFT_LENGTH)+
 								   30*arm_sin_f32(2*PI*i*4/FFT_LENGTH)+
-				                   50*arm_cos_f32(2*PI*i*8/FFT_LENGTH);	//Éú³ÉÊäÈëĞÅºÅÊµ²¿
-				 fft_inputbuf[2*i+1]=0;//Ğé²¿È«²¿Îª0
+				                   50*arm_cos_f32(2*PI*i*8/FFT_LENGTH);	//ç”Ÿæˆè¾“å…¥ä¿¡å·å®éƒ¨
+				 fft_inputbuf[2*i+1]=0;//è™šéƒ¨å…¨éƒ¨ä¸º0
 			}
-			__HAL_TIM_SET_COUNTER(&TIM3_Handler,0);//ÖØÉèTIM3¶¨Ê±Æ÷µÄ¼ÆÊıÆ÷Öµ
+			__HAL_TIM_SET_COUNTER(&TIM3_Handler,0);//é‡è®¾TIM3å®šæ—¶å™¨çš„è®¡æ•°å™¨å€¼
 			timeout=0;
-			arm_cfft_radix4_f32(&scfft,fft_inputbuf);	//FFT¼ÆËã£¨»ù4£©
-            time=__HAL_TIM_GET_COUNTER(&TIM3_Handler)+(u32)timeout*65536;//¼ÆËãËùÓÃÊ±¼ä
+			arm_cfft_radix4_f32(&scfft,fft_inputbuf);	//FFTè®¡ç®—ï¼ˆåŸº4ï¼‰
+            time=__HAL_TIM_GET_COUNTER(&TIM3_Handler)+(u32)timeout*65536;//è®¡ç®—æ‰€ç”¨æ—¶é—´
 			sprintf((char*)buf,"%0.3fms\r\n",time/1000);	
-			LCD_ShowString(30+12*8,160,100,16,16,buf);	//ÏÔÊ¾ÔËĞĞÊ±¼ä		
-			arm_cmplx_mag_f32(fft_inputbuf,fft_outputbuf,FFT_LENGTH);	//°ÑÔËËã½á¹û¸´ÊıÇóÄ£µÃ·ùÖµ 
+			LCD_ShowString(30+12*8,160,100,16,16,buf);	//æ˜¾ç¤ºè¿è¡Œæ—¶é—´		
+			arm_cmplx_mag_f32(fft_inputbuf,fft_outputbuf,FFT_LENGTH);	//æŠŠè¿ç®—ç»“æœå¤æ•°æ±‚æ¨¡å¾—å¹…å€¼ 
 			printf("\r\n%d point FFT runtime:%0.3fms\r\n",FFT_LENGTH,time/1000);
 			printf("FFT Result:\r\n");
 			for(i=0;i<FFT_LENGTH;i++)

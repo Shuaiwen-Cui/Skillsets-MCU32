@@ -2,7 +2,9 @@
   "C_Cpp_Runner.msvcBatchPath": "",
   "files.associations": {
     "*.md": "markdown",
-    "malloc.h": "c"
+    "malloc.h": "c",
+    "ff.h": "c",
+    "sdmmc_sdcard.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",
