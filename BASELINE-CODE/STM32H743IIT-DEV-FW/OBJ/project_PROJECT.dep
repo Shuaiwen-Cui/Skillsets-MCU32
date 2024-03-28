@@ -1,5 +1,5 @@
 Dependencies for Project 'project', Target 'PROJECT': (DO NOT MODIFY !)
-F (.\main.c)(0x5B8DFF78)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\main.o --depend ..\obj\main.d)
+F (.\main.c)(0x66003F1E)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\main.o --depend ..\obj\main.d)
 I (..\SYSTEM\sys\sys.h)(0x5B1E5DD6)
 I (..\USER\stm32h7xx.h)(0x5B3BDE38)
 I (..\USER\stm32h743xx.h)(0x5B3BDE38)
@@ -94,7 +94,7 @@ I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_hcd.h)(0x5B3BDEB8)
 I (..\SYSTEM\delay\delay.h)(0x5938B3C2)
 I (..\SYSTEM\usart\usart.h)(0x5938B3A1)
 I (..\HARDWARE\LED\led.h)(0x5938CA48)
-I (..\HARDWARE\KEY\key.h)(0x598D9CC1)
+I (..\HARDWARE\KEY\key.h)(0x65F833F2)
 I (..\HARDWARE\LCD\ltdc.h)(0x5995400A)
 I (..\HARDWARE\LCD\lcd.h)(0x64829AB2)
 I (D:\Keil5\ARM\ARMCC\include\stdlib.h)(0x599ECD2C)
@@ -106,7 +106,7 @@ I (..\HARDWARE\IIC\myiic.h)(0x58007C40)
 I (..\HARDWARE\MPU\mpu.h)(0x5B6AAD1A)
 I (..\MALLOC\malloc.h)(0x5B779051)
 I (..\HARDWARE\W25QXX\w25qxx.h)(0x579076F9)
-I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x5B7FC0A7)
+I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x66003E80)
 I (..\HARDWARE\TIMER\timer.h)(0x5B8DFAC7)
 I (..\DSPLIB\Include\arm_math.h)(0x5B3BDDE4)
 I (D:\Keil5\ARM\ARMCC\include\string.h)(0x599ECD2C)
@@ -3311,7 +3311,7 @@ I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_ll_usb.h)(0x5B3BDEFC)
 I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_pcd_ex.h)(0x5B3BDED6)
 I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_hcd.h)(0x5B3BDEB8)
 F (..\HARDWARE\KEY\key.c)(0x598D9CC1)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\key.o --depend ..\obj\key.d)
-I (..\HARDWARE\KEY\key.h)(0x598D9CC1)
+I (..\HARDWARE\KEY\key.h)(0x65F833F2)
 I (..\SYSTEM\sys\sys.h)(0x5B1E5DD6)
 I (..\USER\stm32h7xx.h)(0x5B3BDE38)
 I (..\USER\stm32h743xx.h)(0x5B3BDE38)
@@ -4070,8 +4070,8 @@ I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_pcd_ex.h)(0x5B3BDED6)
 I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_hcd.h)(0x5B3BDEB8)
 I (..\HARDWARE\IIC\myiic.h)(0x58007C40)
 I (..\SYSTEM\delay\delay.h)(0x5938B3C2)
-F (..\HARDWARE\SDMMC\sdmmc_sdcard.c)(0x5B80C86D)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\sdmmc_sdcard.o --depend ..\obj\sdmmc_sdcard.d)
-I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x5B7FC0A7)
+F (..\HARDWARE\SDMMC\sdmmc_sdcard.c)(0x66003EB3)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\sdmmc_sdcard.o --depend ..\obj\sdmmc_sdcard.d)
+I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x66003E80)
 I (..\SYSTEM\sys\sys.h)(0x5B1E5DD6)
 I (..\USER\stm32h7xx.h)(0x5B3BDE38)
 I (..\USER\stm32h743xx.h)(0x5B3BDE38)
@@ -5028,7 +5028,7 @@ I (..\HALLIB\STM32H7xx_HAL_Driver\Inc\stm32h7xx_hal_hcd.h)(0x5B3BDEB8)
 I (..\FATFS\source\ff.h)(0x5AC89334)
 I (..\FATFS\source\integer.h)(0x5AC89334)
 I (..\FATFS\source\ffconf.h)(0x5B62B890)
-I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x5B7FC0A7)
+I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x66003E80)
 I (..\USMART\usmart.h)(0x5763B1D9)
 I (..\USMART\usmart_str.h)(0x5763B1D9)
 I (..\SYSTEM\usart\usart.h)(0x5938B3A1)
@@ -5038,7 +5038,7 @@ I (D:\Keil5\ARM\ARMCC\include\string.h)(0x599ECD2C)
 F (..\FATFS\source\diskio.c)(0x5B80C3F9)(--c99 -c --cpu Cortex-M7.fp.dp -g -O0 --apcs=interwork --split_sections -I ..\CORE -I ..\USER -I ..\SYSTEM\delay -I ..\SYSTEM\sys -I ..\SYSTEM\usart -I ..\HALLIB\STM32H7xx_HAL_Driver\Inc -I ..\USMART -I ..\MALLOC -I ..\HARDWARE\LED -I ..\HARDWARE\KEY -I ..\HARDWARE\TIMER -I ..\HARDWARE\MPU -I ..\HARDWARE\LCD -I ..\HARDWARE\SDRAM -I ..\HARDWARE\24CXX -I ..\HARDWARE\IIC -I ..\HARDWARE\PCF8574 -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\HARDWARE\SPI -I ..\HARDWARE\SDMMC -I ..\HARDWARE\NAND -I ..\HARDWARE\QSPI -I ..\HARDWARE\W25QXX -I ..\FATFS\exfuns -I ..\FATFS\source -I ..\TEXT -I ..\DSPLIB\Include-I.\RTE\_PROJECT-ID:\Keil5\ARM\PACK\Keil\STM32H7xx_DFP\3.1.1\Drivers\CMSIS\Device\ST\STM32H7xx\Include-ID:\Keil5\ARM\CMSIS\Include-D__UVISION_VERSION="527" -DSTM32H743xx -DUSE_HAL_DRIVER -DSTM32H743xx -DARM_MATH_CM7 -D__CC_ARM -DARM_MATH_MATRIX_CHECK -DARM_MATH_ROUNDING-o ..\obj\diskio.o --depend ..\obj\diskio.d)
 I (..\FATFS\source\diskio.h)(0x5AC89334)
 I (..\FATFS\source\integer.h)(0x5AC89334)
-I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x5B7FC0A7)
+I (..\HARDWARE\SDMMC\sdmmc_sdcard.h)(0x66003E80)
 I (..\SYSTEM\sys\sys.h)(0x5B1E5DD6)
 I (..\USER\stm32h7xx.h)(0x5B3BDE38)
 I (..\USER\stm32h743xx.h)(0x5B3BDE38)
