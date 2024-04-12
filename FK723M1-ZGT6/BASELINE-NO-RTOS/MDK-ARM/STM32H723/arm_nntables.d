@@ -1,0 +1,10 @@
+stm32h723\arm_nntables.o: ..\Drivers\CMSIS\NN\Source\NNSupportFunctions\arm_nntables.c
+stm32h723\arm_nntables.o: ..\Drivers\CMSIS\NN\Include\arm_nnsupportfunctions.h
+stm32h723\arm_nntables.o: ..\Drivers\CMSIS\DSP\Include\arm_math.h
+stm32h723\arm_nntables.o: ../Drivers/CMSIS/Include/cmsis_compiler.h
+stm32h723\arm_nntables.o: D:\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
+stm32h723\arm_nntables.o: ../Drivers/CMSIS/Include/cmsis_armcc.h
+stm32h723\arm_nntables.o: D:\Keil5\ARM\ARMCC\Bin\..\include\string.h
+stm32h723\arm_nntables.o: D:\Keil5\ARM\ARMCC\Bin\..\include\math.h
+stm32h723\arm_nntables.o: D:\Keil5\ARM\ARMCC\Bin\..\include\float.h
+stm32h723\arm_nntables.o: ..\Drivers\CMSIS\DSP\Include\arm_common_tables.h
