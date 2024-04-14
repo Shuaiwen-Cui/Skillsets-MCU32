@@ -1,0 +1,102 @@
+[GPR_SPC] : GPR-SPC calculation for validation against computer!
+[GPR_SPC] : Loading data from SD card...
+[GPR_SPC] : IN_TRAIN loaded! (currently hard coded)
+IN_TRAIN[  0] = -0.027154,  0.001595, 
+IN_TRAIN[  1] =  0.459352,  0.001676, 
+IN_TRAIN[  2] = -1.393113,  0.003094, 
+IN_TRAIN[  3] =  1.273314,  0.003114, 
+IN_TRAIN[  4] = -0.625930,  0.005072, 
+IN_TRAIN[  5] =  1.039417,  0.006030, 
+IN_TRAIN[  6] = -1.411824,  0.006209, 
+IN_TRAIN[  7] = -2.450327,  0.006524, 
+IN_TRAIN[  8] =  1.273314,  0.006843, 
+IN_TRAIN[  9] = -1.701857,  0.007515, 
+IN_TRAIN[ 10] = -0.111357,  0.009030, 
+IN_TRAIN[ 11] = -0.588507,  0.009149, 
+IN_TRAIN[ 12] = -0.841116,  0.009596, 
+IN_TRAIN[ 13] = -0.176848,  0.010168, 
+IN_TRAIN[ 14] =  1.114264,  0.010216, 
+IN_TRAIN[ 15] = -1.205995,  0.010282, 
+IN_TRAIN[ 16] = -0.494948,  0.011098, 
+IN_TRAIN[ 17] =  1.245246,  0.011250, 
+IN_TRAIN[ 18] =  1.245246,  0.011327, 
+IN_TRAIN[ 19] =  0.188031,  0.011674, 
+[GPR_SPC] : OUT_TRAIN loaded! (currently hard coded)
+OUT_TRAIN[  0] =  0.001542, 
+OUT_TRAIN[  1] =  0.002151, 
+OUT_TRAIN[  2] =  0.003654, 
+OUT_TRAIN[  3] =  0.003248, 
+OUT_TRAIN[  4] =  0.007727, 
+OUT_TRAIN[  5] =  0.011101, 
+OUT_TRAIN[  6] =  0.011380, 
+OUT_TRAIN[  7] =  0.012653, 
+OUT_TRAIN[  8] =  0.009444, 
+OUT_TRAIN[  9] =  0.017132, 
+OUT_TRAIN[ 10] =  0.019265, 
+OUT_TRAIN[ 11] =  0.012889, 
+OUT_TRAIN[ 12] =  0.030868, 
+OUT_TRAIN[ 13] =  0.018706, 
+OUT_TRAIN[ 14] =  0.015267, 
+OUT_TRAIN[ 15] =  0.020276, 
+OUT_TRAIN[ 16] =  0.028665, 
+OUT_TRAIN[ 17] =  0.019988, 
+OUT_TRAIN[ 18] =  0.018841, 
+OUT_TRAIN[ 19] =  0.017108, 
+[GPR_SPC] : IN_PRED loaded! (currently hard coded)
+IN_PRED[  0] =  0.145733,  0.012363, 
+IN_PRED[  1] = -0.238355,  0.026001, 
+IN_PRED[  2] = -0.576719,  0.011350, 
+IN_PRED[  3] = -0.640733,  0.013015, 
+IN_PRED[  4] =  0.502387,  0.023376, 
+IN_PRED[  5] = -0.009731,  0.016646, 
+IN_PRED[  6] =  1.490042,  0.014338, 
+IN_PRED[  7] =  1.325433,  0.017032, 
+IN_PRED[  8] =  1.023649,  0.014571, 
+IN_PRED[  9] =  0.694431,  0.013153, 
+[GPR_SPC] : OUT_GT loaded! (currently hard coded)
+OUT_GT[  0] =  0.025797, 
+OUT_GT[  1] =  0.043424, 
+OUT_GT[  2] =  0.025710, 
+OUT_GT[  3] =  0.032642, 
+OUT_GT[  4] =  0.040897, 
+OUT_GT[  5] =  0.041181, 
+OUT_GT[  6] =  0.026072, 
+OUT_GT[  7] =  0.027838, 
+OUT_GT[  8] =  0.025819, 
+OUT_GT[  9] =  0.035506, 
+[GPR_SPC] : Data loaded!
+[GPR_SPC] : OUT_PRED calculated.
+[GPR_SPC] : OUT_PRED:
+    0.023685	
+    0.052555	
+    0.023275	
+    0.026856	
+    0.044188	
+    0.032793	
+    0.023221	
+    0.028645	
+    0.025205	
+    0.023596	
+[GPR_SPC] : OUT_PRED_VAR:
+    0.001207	
+    0.001201	
+    0.001281	
+    0.001057	
+    0.001146	
+    0.000975	
+    0.000944	
+    0.001332	
+    0.000893	
+    0.000975	
+[GPR_SPC] : OUT_PRED_STD:
+    0.034746	
+    0.034661	
+    0.035794	
+    0.032510	
+    0.033848	
+    0.031231	
+    0.030717	
+    0.036503	
+    0.029888	
+    0.031219	
+[GPR_SPC] : GPR-SPC calculation done!
